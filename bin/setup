@@ -53,4 +53,4 @@ config.redis.set "admin", { "email" => credentials.email }.to_json
 Admin.new.password = credentials.password
 
 puts
-puts "You're setup to login now!"
+puts "Your login is setup, you're ready to rackup now!"
