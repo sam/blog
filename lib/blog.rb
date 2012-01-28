@@ -22,30 +22,31 @@ class Blog < Sinatra::Base
     @posts = Post.recent
     @archives = Post.archive
     @categories = Category.titles
-    erubis :index
+    erb :index
   end
   
   get "/posts/new" do
-    erubis :post
+    erb :post
   end
   
   get "/admin" do
     if authenticated?
-      erubis :admin
+      erb :admin
     else
-      erubis :login
+      erb :login
     end
   end
   
   get "/login" do
-    erubis :login
+    erb :login
   end
   
   post "/login" do
     if session["auth"] = Admin.authenticate(params["email"], params["password"], params["token"])
       redirect to("/admin")
     else
-      erubis :login
+      @error = true
+      erb :login
     end
   end
   

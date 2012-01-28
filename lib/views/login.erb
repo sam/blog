@@ -1,6 +1,31 @@
-<form action="/login" method="post" accept-charset="utf-8">
-  <input type="text" name="email" id="email" size="20" value="<%= params["email"] %>">
-  <input type="password" name="password" id="password" size="20" value="<%= params["password"] %>">
+<% if @error %>
+<div class="alert-message error">
+  <a class="close" href="#">×</a>
+  <p><strong>Oops!</strong> It looks like you need to <a href="javascript:$('#email').focus()">try again</a>.</p>
+</div>
+<% end %>
 
-  <p><input type="submit" value="Login &rarr;"></p>
-</form>
+<div class="row" style="margin-top: 40px;">
+  <div class="span8" style="border: 1px solid #ddd; padding-top: 10px;">
+    <form action="/login" method="post" accept-charset="utf-8" style="margin-bottom: 0px;">
+      <fieldset id="login" style="margin-bottom: 0px;">
+        <legend>Login</legend>
+        <div class="clearfix">
+          <label for="email">Email</label>
+          <div class="input">
+            <input class="large<%= @error ? " error" : "" %>" type="text" name="email" id="email" size="20" value="<%= params["email"] %>">
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="password">Password</label>
+          <div class="input">
+            <input class="password<%= @error ? " error" : "" %>" type="text" name="password" id="password" size="20">
+          </div>
+        </div>
+        <div class="actions" style="margin-bottom: 0px;">
+          <input type="submit" class="btn primary" value="Submit">
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
