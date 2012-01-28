@@ -1,3 +1,25 @@
 This is my blog.
 
 Run bin/setup to create a login so you can rackup and give it a spin yourself!
+
+TODO:
+
+== Login
+
+  * Reduce width of error message to match form
+  * Make 'X' on error message work to dismiss
+
+== Admin
+
+  * List current posts
+  * Settings
+    * Update admin email/password
+    * Update Analytics ID
+
+== New Post (MVP)
+
+  * Slug
+  * Title
+  * Body
+  * PublishedAt
+  * Categories
