@@ -1,0 +1,49 @@
+<% if @saved %>
+<div class="alert-message success fade in" data-alert="alert">
+  <a class="close" href="#">×</a>
+  <p>Post Saved!</p>
+</div>
+<% end %>
+
+<% if !@post.errors.empty? %>
+<div class="alert-message error fade in" data-alert="alert">
+  <a class="close" href="#">×</a>
+  <p><strong>Oops!</strong> It looks like you need to <a href="javascript:$('#email').focus()">try again</a>.</p>
+</div>
+<% end %>
+          
+<form action="/posts" method="post" accept-charset="utf-8" style="margin-bottom: 0px;">
+  <fieldset id="post" style="margin-bottom: 0px;">
+    <legend>Post</legend>
+    <div class="clearfix<%= @post.errors.key?(:title) ? " error" : "" %>">
+      <label for="title">Title</label>
+      <div class="input">
+        <input class="xlarge<%= @post.errors.key?(:title) ? " error" : "" %>" type="text" name="title" id="title" size="50" value="<%= @post.title %>">
+        <% if @post.errors.key? :title %>
+        <span class="help-inline"><%= @post.errors[:title] %></span>
+        <% end %>
+      </div>
+    </div>
+    <div class="clearfix<%= @post.errors.key?(:published_at) ? " error" : "" %>">
+      <label for="published_at">Published At</label>
+      <div class="input">
+        <input class="large<%= @post.errors.key?(:published_at) ? " error" : "" %>" type="text" name="published_at" id="published_at" size="20" value="<%= params[:published_at] || @post.published_at %>">
+        <% if @post.errors.key? :published_at %>
+        <span class="help-inline"><%= @post.errors[:published_at] %></span>
+        <% end %>
+      </div>
+    </div>
+    <div class="clearfix<%= @post.errors.key?(:body) ? " error" : "" %>">
+      <label for="body">Body</label>
+      <div class="input">
+        <textarea class="xxlarge<%= @post.errors.key?(:body) ? " error" : "" %>" id="body" name="body" rows="12"><%= @post.body %></textarea>
+        <% if @post.errors.key? :body %>
+        <span class="help-inline"><%= @post.errors[:body] %></span>
+        <% end %>
+      </div>
+    </div>
+    <div class="actions" style="margin-bottom: 0px;">
+      <input type="submit" class="btn primary" value="Save">
+    </div>
+  </fieldset>
+</form>

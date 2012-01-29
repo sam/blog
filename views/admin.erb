@@ -1,0 +1,22 @@
+<a class="btn primary" title="New Post" href="/posts/new">New Post</a>
+
+<table class="zebra-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Published</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for post in @posts %>
+      <tr>
+        <td><%= post.title %></td>
+        <% if post.published? %>
+        <td><%= date_to_string post.published_at %></td>
+        <% else %>
+        <td><span class="label">DRAFT</span></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

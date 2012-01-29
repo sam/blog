@@ -1,6 +1,7 @@
 $: << File.dirname(__FILE__)
 require "bundler/setup"
 require "configuration"
+require "blank"
 
 def config
   @config ||= Configuration.new
@@ -15,9 +16,16 @@ require "category"
 
 class Blog < Sinatra::Base
 
-  set :erubis, :escape_html => true
+  set :root, (File.dirname(__FILE__) + "/..")
+  set :erb, :escape_html => true
   enable :sessions
 
+  helpers do
+    def date_to_string(date)
+      date.strftime("%d %b %Y")
+    end
+  end
+  
   get "/" do
     @posts = Post.recent
     @archives = Post.archive
@@ -26,11 +34,27 @@ class Blog < Sinatra::Base
   end
 
   get "/posts/new" do
+    @post = Post.new
     erb :post
+  end
+  
+  post "/posts" do
+    @post = Post.new
+    @post.title = params[:title]
+    @post.published_at = params[:published_at]
+    @post.body = params[:body]
+    @post.categories = params[:categories]
+    if @post.errors.empty?
+      @saved = @post.save
+      erb :post
+    else
+      erb :post
+    end
   end
 
   get "/admin" do
     if authenticated?
+      @posts = Post.all
       erb :admin
     else
       erb :login

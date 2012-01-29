@@ -1,10 +1,10 @@
 <% if @error %>
-<div class="alert-message error">
+<div class="alert-message error fade in" data-alert="alert">
   <a class="close" href="#">×</a>
   <p><strong>Oops!</strong> It looks like you need to <a href="javascript:$('#email').focus()">try again</a>.</p>
 </div>
 <% end %>
-
+          
 <div class="row" style="margin-top: 40px;">
   <div class="span8" style="border: 1px solid #ddd; padding-top: 10px;">
     <form action="/login" method="post" accept-charset="utf-8" style="margin-bottom: 0px;">
@@ -19,7 +19,7 @@
         <div class="clearfix">
           <label for="password">Password</label>
           <div class="input">
-            <input class="password<%= @error ? " error" : "" %>" type="text" name="password" id="password" size="20">
+            <input class="password<%= @error ? " error" : "" %>" type="password" name="password" id="password" size="20">
           </div>
         </div>
         <div class="actions" style="margin-bottom: 0px;">
