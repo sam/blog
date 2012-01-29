@@ -24,6 +24,12 @@ class Blog < Sinatra::Base
     def date_to_string(date)
       date.strftime("%d %b %Y")
     end
+    
+    def error_for?(object, field)
+      if request.post? && object.errors.key?(field)
+        " error"
+      end
+    end
   end
   
   get "/" do
@@ -38,6 +44,11 @@ class Blog < Sinatra::Base
     erb :post
   end
   
+  get "/posts/:slug/edit" do
+    @post = Post.get params[:slug]
+    erb :post
+  end
+  
   post "/posts" do
     @post = Post.new
     @post.title = params[:title]
@@ -45,7 +56,7 @@ class Blog < Sinatra::Base
     @post.body = params[:body]
     @post.categories = params[:categories]
     if @post.errors.empty?
-      @saved = @post.save
+      @post.save
       erb :post
     else
       erb :post

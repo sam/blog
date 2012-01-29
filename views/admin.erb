@@ -10,7 +10,7 @@
   <tbody>
     <% for post in @posts %>
       <tr>
-        <td><%= post.title %></td>
+        <td><a href="/posts/<%= post.to_url %>/edit" title="Edit <%= post.title %>"><%= post.title %></a></td>
         <% if post.published? %>
         <td><%= date_to_string post.published_at %></td>
         <% else %>
