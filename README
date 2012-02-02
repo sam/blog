@@ -11,7 +11,6 @@ TODO:
 
 == Admin
 
-  * List current posts
   * Settings
     * Update admin email/password
     * Update Analytics ID
@@ -23,3 +22,7 @@ TODO:
   * Body
   * PublishedAt
   * Categories
+
+== Categories
+
+  * List

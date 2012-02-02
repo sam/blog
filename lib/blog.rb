@@ -9,6 +9,7 @@ end
 
 require "sinatra/base"
 require "erubis"
+require "redcloth"
 
 require "admin"
 require "post"
@@ -47,6 +48,11 @@ class Blog < Sinatra::Base
   get "/posts/:slug/edit" do
     @post = Post.get params[:slug]
     erb :post
+  end
+  
+  get "/posts/:slug" do
+    @post = Post.get params[:slug]
+    erb :show
   end
   
   post "/posts" do

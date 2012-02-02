@@ -1,0 +1,23 @@
+<h1><%= @post.title %></h1>
+
+<div class="dateline">
+  <%= date_to_string @post.published_at %>
+</div>
+
+<% unless @post.categories.blank? %>
+<div class="categories">Filed under <%= @post.categories %></div>
+<% end %>
+
+<div id='tweet'>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-text="<%= @post.title %>" data-count="horizontal" data-via="srsmoot" onClick="_gaq.push(['_trackEvent', 'Link', 'Click', 'Post Twitter Share']);">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+</div>
+
+<article>
+  <%== textile @post.body %>
+
+  <footer>
+    <p id='questions'>
+      Questions and comments <a href="http://twitter.com/srsmoot" onClick="_gaq.push(['_trackEvent', 'Link', 'Click', 'Post Twitter Feedback']);">@srsmoot</a>
+    </p>
+  </footer>
+</article>
