@@ -42,8 +42,19 @@
         <% end %>
       </div>
     </div>
+    <div class="clearfix">
+      <label for="categories">Categories</label>
+      <div class="input">
+        <input class="large typeahead" type="text" name="categories[]" id="categories" size="20">
+      </div>
+    </div>
     <div class="actions" style="margin-bottom: 0px;">
       <input type="submit" class="btn primary" value="Save">
     </div>
   </fieldset>
 </form>
+
+<script src="/js/bootstrap-typeahead.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $('.typeahead').typeahead({ "source": <%== Category.titles.to_json %> });
+</script>

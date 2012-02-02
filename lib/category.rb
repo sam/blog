@@ -1,5 +1,5 @@
 class Category
   def self.titles
-    config.redis.hkeys "categories" || []
+    config.redis.smembers "categories" || []
   end
 end
