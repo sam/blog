@@ -4,15 +4,15 @@ require "stringex"
 class Post
 
   def self.recent
-    fetch(*config.redis.smembers("posts")[0,5])
+    fetch(*config.redis.lrange("posts", 0, 5))
   end
-
+  
   def self.archive
-    fetch(*config.redis.smembers("posts")[5,20])
+    fetch(*config.redis.lrange("posts", 5, 20))
   end
   
   def self.all
-    fetch(*config.redis.smembers("posts"))
+    fetch(*config.redis.lrange("posts", 0, config.redis.llen("posts")))
   end
   
   def self.get(slug)
@@ -79,7 +79,7 @@ class Post
 
   def save
     config.redis.set key, to_json
-    config.redis.sadd "posts", key
+    config.redis.lpush "posts", key
   end
     
   private

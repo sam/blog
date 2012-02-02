@@ -1,9 +1,9 @@
 <div id="posts">
   <% for post in @posts %>
-    <h2><a href="<%= post.url %>" title="Permanent link to: '<%= post.title %>'"><%= post.title %></a></h2>
+    <h2><a href="<%= post.to_url %>" title="Permanent link to: '<%= post.title %>'"><%= post.title %></a></h2>
 
     <div class="dateline">
-      <%= post.date %>
+      <%= date_to_string post.published_at %>
     </div>
 
     <div class="categories">Filed under <%= post.categories %></div>
@@ -19,8 +19,8 @@
 <ul id="post_archive">
   <% for post in @archives %>
     <li>
-      <a class="nine columns offset-by-four" href="<%= post.url %>"><%= post.title %></a>
-      <span class="three columns"><%= post.date %></span>
+      <a class="nine columns offset-by-four" href="<%= post.to_url %>"><%= post.title %></a>
+      <span class="three columns"><%= date_to_string post.published_at %></span>
     </li>
   <% end %>
 </ul>
