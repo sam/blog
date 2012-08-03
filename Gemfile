@@ -1,12 +1,10 @@
-source :gemcutter
+source "http://rubygems.org"
 
-gem "sinatra"
-gem "redis"
-gem "SystemTimer"
+gem "harbor", git: "git://github.com/sam/harbor.git"
+gem "rest-client"
 gem "json"
 gem "bcrypt-ruby"
 gem "uuid"
-gem "erubis"
 gem "RedCloth"
 gem "chronic"
 gem "stringex"
