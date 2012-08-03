@@ -1,5 +1,7 @@
 source "http://rubygems.org"
 
+gem "jruby-rack"
+gem "erubis"
 gem "harbor", git: "git://github.com/sam/harbor.git"
 gem "rest-client"
 gem "json"
