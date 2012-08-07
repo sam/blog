@@ -5,7 +5,13 @@ class Blog
       @posts = Post.recent
       @archives = Post.archive(@posts.last.key)
       @categories = Category.titles
-      render "home/index"
+      render "posts/index"
     end
+    
+    get "/posts/:slug" do |slug|
+      @post = Post.get slug
+      render "posts/show"
+    end
+    
   end
 end
