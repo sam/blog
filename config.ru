@@ -1,3 +1,7 @@
-require "lib/blog"
+#!/usr/bin/env ruby
 
-run Blog
+$:.unshift File.dirname(__FILE__)
+
+require "lib/boot.rb"
+
+run Harbor.new

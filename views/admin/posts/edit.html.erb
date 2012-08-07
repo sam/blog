@@ -27,7 +27,7 @@
     <div class="clearfix<%= error_for? @post, :published_at %>">
       <label for="published_at">Published At</label>
       <div class="input">
-        <input class="large<%= error_for? @post, :published_at %>" type="text" name="published_at" id="published_at" size="20" value="<%= params[:published_at] || @post.published_at %>">
+        <input class="large<%= error_for? @post, :published_at %>" type="text" name="published_at" id="published_at" size="20" value="<%= request[:published_at] || @post.published_at %>">
         <% if error_for? @post, :published_at %>
         <span class="help-inline"><%= @post.errors[:published_at] %></span>
         <% end %>

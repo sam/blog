@@ -1,16 +1,16 @@
-require "json"
 require "bcrypt"
-require "uuid"
 
 class Admin
 
+  ID = "admin"
+  
   include BCrypt
 
   def self.authenticate(email, password, token)
     admin = Admin.new
-    if admin.token == token
+    if !token.blank? && admin.token == token
       admin.token
-    elsif admin.email == email.strip && admin.password == password
+    elsif admin.email == email.to_s.strip && admin.password == password.to_s
       admin.tokenize!
     else
       nil
@@ -18,10 +18,11 @@ class Admin
   end
 
   def initialize
-    data = JSON::parse(config.redis.get "admin")
+    data = DB.get ID
     @email = data["email"]
     @password_hash = data["password_hash"]
-    @token = data["token"]
+    @token = data["auth"]
+    @rev = data["_rev"]
   end
 
   attr_reader :email
@@ -41,25 +42,29 @@ class Admin
   end
 
   def tokenize!
-    @token = UUID.new.generate
+    @token = java.util.UUID.randomUUID.to_s.freeze
     save!
     @token
   end
 
   def to_hash
     {
+      "_id" => ID,
+      "_rev" => @rev,
       "email" => @email,
       "password_hash" => password,
-      "token" => token
+      "auth" => token
     }
-  end
-
-  def to_json
-    to_hash.to_json
   end
 
 private
   def save!
-    config.redis.set "admin", to_json
+    DB.update_doc ID do |doc|
+      # For some insane reason you can't just call doc.merge(to_hash)!
+      # Your save will silently fail...
+      doc["email"] = @email
+      doc["password_hash"] = password
+      doc["auth"] = token
+    end
   end
 end

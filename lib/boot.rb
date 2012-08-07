@@ -1,1 +1,1 @@
-require_relative "lib/blog"
+require_relative "blog"

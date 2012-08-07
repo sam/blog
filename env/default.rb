@@ -1,4 +1,5 @@
-require "sequel"
+require "json"
+require "couchrest"
 
 ### Application's root path
 # If you are developing a port you should use Blog.root outside
@@ -53,3 +54,5 @@ config.assets.precompiled_assets = %w( application.js application.css )
 # need to restart the app to see template changes while developing
 #
 #  Harbor::View.cache_templates!
+
+config.couchdb = "http://localhost:5984/blog"

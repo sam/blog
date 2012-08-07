@@ -1,4 +1,4 @@
-<a class="btn primary" title="New Post" href="/posts/new">New Post</a>
+<a class="btn primary" title="New Post" href="/admin/posts/new">New Post</a>
 
 <table class="zebra-striped">
   <thead>
@@ -10,7 +10,7 @@
   <tbody>
     <% for post in @posts %>
       <tr>
-        <td><a href="/posts/<%= post.to_url %>/edit" title="Edit <%= post.title %>"><%= post.title %></a></td>
+        <td><a href="/admin/posts/<%= post.to_url %>/edit" title="Edit <%= post.title %>"><%= post.title %></a></td>
         <% if post.published? %>
         <td><%= date_to_string post.published_at %></td>
         <% else %>

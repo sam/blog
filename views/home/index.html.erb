@@ -1,8 +1,28 @@
-<h1>Welcome to Harbor <span>You're all set to go!</span></h1>
+<div id="posts">
+  <% for post in @posts %>
+    <h2><a href="/posts/<%= post.to_url %>" title="Permanent link to: '<%= post.title %>'"><%= post.title %></a></h2>
 
-<p class="feature">Congratulations on creating your first Harbor application! Now you should be ready to dive in, and here are some resources to get you started:</p>
+    <div class="dateline">
+      <%= date_to_string post.published_at %>
+    </div>
 
-<h2>What Am I?</h2>
-<p>I'm just a default view to help you get started. I live in <kbd>views/home/index.html.erb</kbd>, and am being rendered by <kbd>controllers/home.rb</kbd>. And, of course, you're being routed here by <kbd>lib/<$= app_name =$>.rb</kbd>.</p>
+    <% unless post.categories.blank? %>
+    <div class="categories">Filed under <%= post.categories.join(", ") %></div>
+    <% end %>
+    
+    <article>
+      <%= textilize post.body %>
+    </article>
+    <hr class="front">
+    </br>
+  <% end %>
+</div>
 
-<p>That's pretty much the default setup for Harbor applications, but if you poke around you'll see you can set me up however you like.</p>
+<ul id="post_archive">
+  <% for post in @archives %>
+    <li>
+      <a class="nine columns offset-by-four" href="/posts/<%= post.to_url %>"><%= post.title %></a>
+      <span class="three columns"><%= date_to_string post.published_at %></span>
+    </li>
+  <% end %>
+</ul>
