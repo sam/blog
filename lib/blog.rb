@@ -83,7 +83,7 @@ class Blog < Sinatra::Base
   end
 
   post "/login" do
-    if session["auth"] = Admin.authenticate(params["email"], params["password"], params["token"])
+    if session["auth"] = Admin.authenticate(params["email"], params["password"], nil)
       redirect to("/admin")
     else
       @error = true
