@@ -15,21 +15,60 @@ class Post
     DB.view("posts/all", descending: true)["rows"].map { |row| Post.new(row["key"], row["value"]) }
   end
   
-  def self.get(slug)
+  def self.get_by_slug(slug)
     if value = DB.view("posts/slugs", key: slug)["rows"].first
       Post.new(value["id"], value["value"])
     else
       nil
     end
   end
+  
+  def self.get_by_id(id)
+    if value = DB.view("posts/by_id", key: id)["rows"].first
+      Post.new(value["id"], value["value"])
+    else
+      nil
+    end
+  end
+  
+  def self.update(id, title, published_at, body, categories)
+    if id.blank?
+      post = Post.new nil,
+        "title"         => title,
+        "published_at"  => published_at,
+        "body"          => body,
+        "categories"    => categories
 
+      DB.save_doc post.to_hash if post.errors.empty?
+      post
+    else
+      post = get_by_id(id)
+      post.title = title
+      post.published_at = published_at
+      post.body = body
+      post.categories = categories
+      
+      if post.errors.empty?
+        DB.update_doc id do |doc|
+          doc["slug"]           = to_url
+          doc["title"]          = title
+          doc["published_at"]   = published_at
+          doc["body"]           = body
+          doc["categories"]     = categories
+        end
+      end
+      
+      post
+    end
+  end
+  
   def initialize(key = nil, value = nil)
     if value
       @key = key
       @title = value["title"]
       @slug = value["slug"]
       @body = value["body"]
-      @published_at = value["published_at"].blank? ? nil : Time::parse(value["published_at"])
+      @published_at = value["published_at"].blank? ? nil : Chronic::parse(value["published_at"])
       @categories = value["categories"]
     end
   end
@@ -80,9 +119,4 @@ class Post
   def to_url
     @slug ||= title.to_url
   end
-
-  # def save
-  #   config.redis.set key, to_json
-  #   config.redis.lpush "posts", key
-  # end
 end

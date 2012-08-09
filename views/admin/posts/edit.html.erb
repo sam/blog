@@ -12,7 +12,8 @@
 <% end %>
 <% end %>
           
-<form action="/posts" method="post" accept-charset="utf-8" style="margin-bottom: 0px;">
+<form action="/admin/posts" method="post" accept-charset="utf-8" style="margin-bottom: 0px;">
+  <input type="hidden" name="id" value="<%= @post.key %>">
   <fieldset id="post" style="margin-bottom: 0px;">
     <legend>Post</legend>
     <div class="clearfix<%= error_for? @post, :title %>">
@@ -50,11 +51,15 @@
     </div>
     <div class="actions" style="margin-bottom: 0px;">
       <input type="submit" class="btn primary" value="Save">
+      <a href="/admin" title="Return to Admin" class="btn">Cancel</a>
+      <% unless @post.key.blank? %>
+      <a href="/admin/posts/<%= @post.slug %>/delete"
+        title="Delete &quot;<%= @post.title %>&quot;" class="btn danger">Delete</a>
+      <% end %>
     </div>
   </fieldset>
 </form>
 
-<script src="/js/bootstrap-typeahead.js"></script>
 <script type="text/javascript" charset="utf-8">
   $('.typeahead').typeahead({ "source": <%== Category.titles.to_json %> });
 </script>

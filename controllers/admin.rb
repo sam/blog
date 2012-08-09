@@ -31,8 +31,17 @@ class Blog
       end
       
       get ":slug/edit" do |slug|
-        @post = ::Post.get slug
+        @post = ::Post.get_by_slug slug
         render "admin/posts/edit"
+      end
+      
+      post do |title, published_at, body, categories, id = nil|
+        @post = Post.update id, title, published_at, body, categories
+        if @post.errors.empty?
+          response.redirect "/admin"
+        else
+          render "admin/posts/edit"
+        end
       end
       
     end

@@ -9,7 +9,7 @@ class Blog
     end
     
     get "/posts/:slug" do |slug|
-      @post = Post.get slug
+      @post = Post.get_by_slug slug
       render "posts/show"
     end
     
