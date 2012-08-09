@@ -36,12 +36,17 @@ class Blog
       end
       
       post do |title, published_at, body, categories, id = nil|
-        @post = Post.update id, title, published_at, body, categories
+        @post = Post.update id, title, published_at, body, categories.split(/,?\s+/)
         if @post.errors.empty?
           response.redirect "/admin"
         else
           render "admin/posts/edit"
         end
+      end
+      
+      get ":id/delete" do |id|
+        Post.delete(id)
+        response.redirect "/admin"
       end
       
     end

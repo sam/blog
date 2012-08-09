@@ -5,4 +5,6 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require_tree .
+//= require jquery-1.7.1.min.js
+//= require bootstrap-alerts.js
+//= require bootstrap-typeahead.js

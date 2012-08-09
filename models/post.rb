@@ -31,6 +31,15 @@ class Post
     end
   end
   
+  def self.delete(id)
+    if value = DB.view("posts/by_id", key: id)["rows"].first
+      rev = value["value"]["_rev"]
+      DB.delete_doc("_id" => id, "_rev" => rev) if rev
+    else
+      raise StandardError.new("Document Not Found for _id: #{id}")
+    end
+  end
+  
   def self.update(id, title, published_at, body, categories)
     if id.blank?
       post = Post.new nil,
@@ -39,7 +48,10 @@ class Post
         "body"          => body,
         "categories"    => categories
 
-      DB.save_doc post.to_hash if post.errors.empty?
+      attributes = post.to_hash
+      attributes["published_at"] = attributes["published_at"].httpdate if attributes["published_at"]
+      
+      DB.save_doc attributes if post.errors.empty?
       post
     else
       post = get_by_id(id)
@@ -50,11 +62,11 @@ class Post
       
       if post.errors.empty?
         DB.update_doc id do |doc|
-          doc["slug"]           = to_url
-          doc["title"]          = title
-          doc["published_at"]   = published_at
-          doc["body"]           = body
-          doc["categories"]     = categories
+          doc["slug"]           = post.to_url
+          doc["title"]          = post.title
+          doc["published_at"]   = post.published_at.httpdate
+          doc["body"]           = post.body
+          doc["categories"]     = post.categories
         end
       end
       
@@ -68,7 +80,7 @@ class Post
       @title = value["title"]
       @slug = value["slug"]
       @body = value["body"]
-      @published_at = value["published_at"].blank? ? nil : Chronic::parse(value["published_at"])
+      @published_at = value["published_at"].blank? ? nil : Chronic::parse(value["published_at"]) || Time::parse(value["published_at"])
       @categories = value["categories"]
     end
   end
