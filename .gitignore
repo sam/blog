@@ -4,3 +4,4 @@ tmp
 .couchdb
 .bundle
 log
+target

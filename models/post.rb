@@ -1,14 +1,26 @@
 require "chronic"
 require "stringex"
+require "pp"
 
 class Post
 
   def self.recent
-    DB.view("posts/all", descending: true, limit: 10)["rows"].map { |row| Post.new(row["key"], row["value"]) }
+    # DB.view("posts/all", descending: true, limit: 10)["rows"].map { |row| Post.new(row["key"], row["value"]) }
+    (CACHE["posts/recent"] ||= begin
+      DB.view("posts/all", descending: true, limit: 10)["rows"].map do |row|
+        data = row["value"].to_map
+        data["categories"] = data["categories"].to_java if data.key? "categories"
+        java.util.HashMap.new({ "key" => row["key"].to_java, "value" => data })
+      end.to_java
+    end).map { |row| Post.new(row["key"], row["value"]) }
   end
   
   def self.archive(startkey)
-    DB.view("posts/archive", descending: true, startkey: startkey, skip: 1)["rows"].map { |row| Post.new(row["key"], row["value"]) }
+    (CACHE["posts/archive"] ||= begin
+      DB.view("posts/archive", descending: true, startkey: startkey, skip: 1)["rows"].map do |row|
+        java.util.HashMap.new({ "key" => row["key"].to_java, "value" => row["value"].to_map })
+      end.to_java
+    end).map { |row| Post.new(row["key"], row["value"]) }
   end
   
   def self.all
@@ -16,22 +28,38 @@ class Post
   end
   
   def self.get_by_slug(slug)
-    if value = DB.view("posts/slugs", key: slug)["rows"].first
-      Post.new(value["id"], value["value"])
-    else
-      nil
+    (CACHE["posts/slugs"] ||= java.util.HashMap.new)[slug] ||= begin
+      if value = DB.view("posts/slugs", key: slug)["rows"].first
+        Post.new(value["id"], value["value"])
+      else
+        nil
+      end
     end
   end
   
   def self.get_by_id(id)
-    if value = DB.view("posts/by_id", key: id)["rows"].first
-      Post.new(value["id"], value["value"])
-    else
-      nil
+    post = (CACHE["posts/by_id"] ||= java.util.HashMap.new)[id] ||= begin
+      if value = DB.view("posts/by_id", key: id)["rows"].first
+        data = value["value"].to_map
+        data["categories"] = data["categories"].to_java if data.key? "categories"
+        java.util.HashMap.new({ "id" => value["id"], "value" => data })
+      else
+        nil
+      end
     end
+    
+    post ? Post.new(post) : nil
+  end
+  
+  def self.clear_cache!
+    CACHE.delete "posts/recent"
+    CACHE.delete "posts/archive"
+    CACHE.delete "posts/slugs"
+    CACHE.delete "posts/by_id"
   end
   
   def self.delete(id)
+    clear_cache!
     if value = DB.view("posts/by_id", key: id)["rows"].first
       rev = value["value"]["_rev"]
       DB.delete_doc("_id" => id, "_rev" => rev) if rev
@@ -41,6 +69,7 @@ class Post
   end
   
   def self.update(id, title, published_at, body, categories)
+    clear_cache!
     if id.blank?
       post = Post.new nil,
         "title"         => title,
