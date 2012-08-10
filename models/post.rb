@@ -5,12 +5,16 @@ require "pp"
 class Post
 
   def self.recent
-    DB.view("posts/all", descending: true, limit: 10)["rows"].map { |row| Post.new(row["key"], row["value"]) }
+    CACHE["posts/recent"] ||= begin
+      DB.view("posts/all", descending: true, limit: 10)["rows"].map { |row| Post.new(row["key"], row["value"]) }
+    end
   end
   
   def self.archive(startkey)
-    DB.view("posts/archive", descending: true, startkey: startkey, skip: 1)["rows"].map do |row|
-      Post.new(row["key"], row["value"])
+    CACHE["posts/archive"] ||= begin
+      DB.view("posts/archive", descending: true, startkey: startkey, skip: 1)["rows"].map do |row|
+        Post.new(row["key"], row["value"])
+      end
     end
   end
   
