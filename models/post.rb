@@ -16,11 +16,12 @@ class Post
   end
   
   def self.archive(startkey)
-    (CACHE["posts/archive"] ||= begin
-      DB.view("posts/archive", descending: true, startkey: startkey, skip: 1)["rows"].map do |row|
-        java.util.HashMap.new({ "key" => row["key"].to_java, "value" => row["value"].to_map })
-      end.to_java
-    end).map { |row| Post.new(row["key"], row["value"]) }
+    []
+    # (CACHE["posts/archive"] ||= begin
+    #   DB.view("posts/archive", descending: true, startkey: startkey, skip: 1)["rows"].map do |row|
+    #     java.util.HashMap.new({ "key" => row["key"].to_java, "value" => row["value"].to_map })
+    #   end.to_java
+    # end).map { |row| Post.new(row["key"], row["value"]) }
   end
   
   def self.all
@@ -28,34 +29,25 @@ class Post
   end
   
   def self.get_by_slug(slug)
-    (CACHE["posts/slugs"] ||= java.util.HashMap.new)[slug] ||= begin
-      if value = DB.view("posts/slugs", key: slug)["rows"].first
-        Post.new(value["id"], value["value"])
-      else
-        nil
-      end
+    if value = DB.view("posts/slugs", key: slug)["rows"].first
+      Post.new(value["id"], value["value"])
+    else
+      nil
     end
   end
   
   def self.get_by_id(id)
-    post = (CACHE["posts/by_id"] ||= java.util.HashMap.new)[id] ||= begin
-      if value = DB.view("posts/by_id", key: id)["rows"].first
-        data = value["value"].to_map
-        data["categories"] = data["categories"].to_java if data.key? "categories"
-        java.util.HashMap.new({ "id" => value["id"], "value" => data })
-      else
-        nil
-      end
+    if value = DB.view("posts/by_id", key: id)["rows"].first
+      Post.new(value["id"], value["value"])
+    else
+      nil
     end
-    
-    post ? Post.new(post) : nil
   end
   
   def self.clear_cache!
+    CACHE.delete "categories"
     CACHE.delete "posts/recent"
     CACHE.delete "posts/archive"
-    CACHE.delete "posts/slugs"
-    CACHE.delete "posts/by_id"
   end
   
   def self.delete(id)

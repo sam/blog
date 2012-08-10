@@ -1,5 +1,7 @@
 class Category
   def self.titles
-  	DB.view("posts/categories", group: true)["rows"].map { |h| h["key"] }
+  	CACHE["categories"] ||= begin
+    	(DB.view("posts/categories", group: true)["rows"].map { |h| h["key"] }).to_java
+    end
   end
 end

@@ -2,6 +2,7 @@ require "rubygems"
 require "bundler/setup"
 require "harbor"
 require "json"
+require_relative "hazelcast-2.2.jar"
 
 Bundler.require(:default, config.environment.to_sym)
 
@@ -20,6 +21,11 @@ class Hash
     java.util.HashMap.new self
   end
 end  
+
+java_import com.hazelcast.core.Hazelcast
+at_exit { Hazelcast.shutdown_all }
+
+CACHE = Hazelcast.get_map "cache"
 
 class Blog < Harbor::Application
 

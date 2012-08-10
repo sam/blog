@@ -1,4 +1,6 @@
-config.reloader.enable!
+# config.reloader.enable!
 config.assets.compile = true
 
-Harbor.serve_public_files! config.root + 'public'
+Harbor::View.cache_templates!
+
+# Harbor.serve_public_files! config.root + 'public'
