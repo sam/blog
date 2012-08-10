@@ -1,5 +1,32 @@
+require "java"
 require "json"
 require "couchrest"
+
+### BEGIN: Hazelcast Configuration
+require_relative "../lib/hazelcast-2.2.jar"
+java_import com.hazelcast.core.Hazelcast
+java_import com.hazelcast.config.Config
+
+at_exit { Hazelcast.shutdown_all }
+
+config.hazelcast = Java::ComHazelcastConfig::Config.new
+config.hazelcast.set_port 5700
+config.hazelcast.set_port_auto_increment false
+
+network = config.hazelcast.get_network_config
+join = network.get_join
+join.get_multicast_config.set_enabled false
+join.get_tcp_ip_config.set_required_member("127.0.0.1").set_enabled true
+network.get_interfaces.set_enabled(true).add_interface "127.0.0.1"
+
+cache_config = Java::ComHazelcastConfig::MapConfig.new
+cache_config.set_name "cache"
+cache_config.set_backup_count 0
+config.hazelcast.add_map_config cache_config
+
+CACHE = config.cache = Hazelcast.get_map "cache"
+
+### END: Hazelcast Configuration
 
 ### Application's root path
 # If you are developing a port you should use Blog.root outside
