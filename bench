@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+httperf --num-conns=20 --num-calls=10 --server=localhost --port=9292 --uri=/
