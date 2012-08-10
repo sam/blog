@@ -18,7 +18,7 @@ class Admin
   end
 
   def initialize
-    data = (CACHE[ID] ||= DB.get(ID).to_map)
+    data = DB.get ID
     @email = data["email"]
     @password_hash = data["password_hash"]
     @token = data["auth"]
@@ -66,6 +66,5 @@ private
       doc["password_hash"] = password
       doc["auth"] = token
     end
-    CACHE.delete ID
   end
 end
