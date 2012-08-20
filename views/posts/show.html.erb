@@ -5,7 +5,7 @@
 </div>
 
 <% unless post.categories.blank? %>
-<div class="categories">Filed under <%= post.categories.join(", ") %></div>
+<div class="categories">Filed under <%= @post.categories.join(", ") %></div>
 <% end %>
 
 <div id='tweet'>
