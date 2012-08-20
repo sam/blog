@@ -1,7 +1,9 @@
+require "models/category/db"
+
 class Category
+  include Model
+  
   def self.titles
-    CACHE["categories"] ||= begin
-  	  DB.view("posts/categories", group: true)["rows"].map { |h| h["key"] }
-  	end
+    self.db.titles
   end
 end

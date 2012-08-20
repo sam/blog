@@ -1,28 +1,19 @@
 require "bcrypt"
-require "models/admin/model"
+require "models/admin/db"
 
 class Admin
-  
-  include HashInitialization
+  include Model
   
   ID = "admin"
   
   include BCrypt
-  
-  def self.model
-    @model ||= Model.new
-  end
-  
-  def self.model=(value)
-    @model = value
-  end
 
   def self.authenticate(email, password, token)
-    admin = self.model.get(ID)
+    admin = self.db.get(ID)
     if !token.blank? && admin.token == token
       admin.token
     elsif admin.email == email.to_s.strip && admin.password == password.to_s
-      self.model.save(admin)
+      self.db.save(admin)
       admin.token # Return the token so that it can be added to the Session.
     else
       nil

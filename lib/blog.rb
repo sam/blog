@@ -5,14 +5,14 @@ require "harbor"
 require "json"
 Dir["target/dependency/*.jar"].each { |jar| require jar }
 
-require "lib/cache_with_defaults"
-require "lib/hash_initialization"
+require "lib/model"
+require "lib/cached_database"
 
 Bundler.require(:default, config.environment.to_sym)
 
 config.load!(Pathname(__FILE__).dirname.parent + "env")
 
-DB = CouchRest.database(config.couchdb)
+COUCH = CouchRest.database(config.couchdb)
 
 java_import org.infinispan.Cache
 java_import org.infinispan.manager.DefaultCacheManager

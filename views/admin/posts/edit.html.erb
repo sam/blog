@@ -13,7 +13,7 @@
 <% end %>
           
 <form action="/admin/posts" method="post" accept-charset="utf-8" style="margin-bottom: 0px;">
-  <input type="hidden" name="id" value="<%= @post.key %>">
+  <input type="hidden" name="_id" value="<%= @post._id %>">
   <fieldset id="post" style="margin-bottom: 0px;">
     <legend>Post</legend>
     <div class="clearfix<%= error_for? @post, :title %>">
@@ -52,8 +52,8 @@
     <div class="actions" style="margin-bottom: 0px;">
       <input type="submit" class="btn primary" value="Save">
       <a href="/admin" title="Return to Admin" class="btn">Cancel</a>
-      <% unless @post.key.blank? %>
-      <a href="/admin/posts/<%= @post.key %>/delete"
+      <% unless @post._id.blank? %>
+      <a href="/admin/posts/<%= @post._id %>/delete"
         title="Delete &quot;<%= @post.title %>&quot;" class="btn danger">Delete</a>
       <% end %>
     </div>
