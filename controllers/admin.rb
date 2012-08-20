@@ -32,7 +32,6 @@ class Blog
       
       get ":slug/edit" do |slug|
         @post = ::Post.get_by_slug slug
-        p @post
         render "admin/posts/edit"
       end
       
