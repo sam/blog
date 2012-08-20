@@ -5,7 +5,8 @@ require "harbor"
 require "json"
 Dir["target/dependency/*.jar"].each { |jar| require jar }
 
-require "cache"
+require "lib/cache_with_defaults"
+require "lib/hash_initialization"
 
 Bundler.require(:default, config.environment.to_sym)
 
