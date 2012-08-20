@@ -4,7 +4,7 @@
   <%= date_to_string @post.published_at %>
 </div>
 
-<% unless post.categories.blank? %>
+<% unless @post.categories.blank? %>
 <div class="categories">Filed under <%= @post.categories.join(", ") %></div>
 <% end %>
 
