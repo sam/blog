@@ -3,7 +3,7 @@ class Blog
   
     get do
       if authenticated?
-        @posts = Post.all
+        @posts = Post.db.all
         render "admin/index"
       else
         render "admin/login"
@@ -31,12 +31,12 @@ class Blog
       end
       
       get ":slug/edit" do |slug|
-        @post = ::Post.get_by_slug slug
+        @post = ::Post.db.get_by_slug slug
         render "admin/posts/edit"
       end
       
       post do |title, published_at, body, categories, _id = nil|
-        @post = _id.blank? ? Post.new : Post.get_by_id(_id)
+        @post = _id.blank? ? Post.new : Post.db.get_by_id(_id)
         @post.title = title
         @post.published_at = published_at
         @post.body = body
@@ -51,7 +51,7 @@ class Blog
       end
       
       get ":id/delete" do |id|
-        Post.delete(id)
+        Post.db.delete(id)
         response.redirect "/admin"
       end
       

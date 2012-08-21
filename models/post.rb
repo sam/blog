@@ -6,30 +6,6 @@ require "models/post/db"
 class Post
   include Model
 
-  def self.recent
-    self.db.recent
-  end
-  
-  def self.archive(startkey)
-    self.db.archive(startkey)
-  end
-  
-  def self.all
-    self.db.all
-  end
-  
-  def self.get_by_slug(slug)
-    self.db.get_by_slug(slug)
-  end
-  
-  def self.get_by_id(id)
-    self.db.get_by_id(id)
-  end
-  
-  def self.delete(id)
-    self.db.delete(id)
-  end
-
   def errors
     @errors = {}
     
