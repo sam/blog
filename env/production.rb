@@ -4,3 +4,4 @@ Harbor::View.cache_templates!
 config.assets.compile = true
 
 config.couchdb = "http://#{File.read(".couchdb").strip}@ssmoot.cloudant.com:5984/blog"
+config.cache = org.infinispan.manager.DefaultCacheManager.new.get_cache

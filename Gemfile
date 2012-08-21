@@ -12,5 +12,6 @@ gem "stringex"
 gem "ffaker"
 gem "minitest"
 gem "minitest-wscolor"
-gem "rjack-logback"
 gem "listen"
+
+# gem "rjack-logback"

@@ -18,7 +18,7 @@ class CachedDatabase
   end
   
   def initialize
-    @cache = CacheWithDefaults.new(CACHE)
+    @cache = CacheWithDefaults.new(config.cache)
   end
   
   def save(model)

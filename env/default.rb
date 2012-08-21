@@ -56,3 +56,5 @@ config.assets.precompiled_assets = %w( application.js application.css )
 #  Harbor::View.cache_templates!
 
 config.couchdb = "http://localhost:5984/blog"
+
+config.cache = {}

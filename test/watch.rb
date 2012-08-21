@@ -36,6 +36,7 @@ class Watcher
 
   private
   def listener
+    source_paths = %w[ assets controllers db env forms helpers lib models ]
     # Using a MultiListener here since the only
     # other way to watch both directories is to
     # create two listeners and start the first in
@@ -43,13 +44,13 @@ class Watcher
     # Neither of these seems all that clean compared to
     # the original 'watchr' code, but it is fewer LOC,
     # it works, and you don't get annoying warnings so...
-    @listener ||= Listen.to("test", "lib")
+    @listener ||= Listen.to(*([ "test" ] + source_paths))
       .filter(/\.rb$/)
       .change do |modified, added, removed|
       modified.each do |path|
         # Filter because the ignore feature on Listener seems to
         # not work... Maybe a MultiListener issue?
-        next unless path =~ /\/(lib\/.*|test\/.*_spec)\.rb$/
+        next unless path =~ /\/((#{source_paths.join("|")})\/.*|test\/.*_spec)\.rb$/
         relative_path_from_root = Pathname(path).relative_path_from(Pathname.pwd)
         run_single_spec relative_path_from_root.to_s.sub(/(_spec)?\.rb/, "").sub(/^(test|lib\/harbor\/ftp)\//, "")
       end
@@ -66,11 +67,11 @@ class Watcher
           require "#{spec}"
           MiniTest::Unit.new._run
         RUBY
-      rescue => e
+      rescue Exception => e
         puts e.to_s, e.backtrace.join("\n")
       end
     else
-      puts "No matching spec for #{spec}"
+      puts "No matching spec for #{underscored_name}"
     end
   end
 
@@ -81,7 +82,7 @@ class Watcher
         Dir["test/**/*_spec.rb"].each { |file| require file }
         MiniTest::Unit.new._run
       RUBY
-    rescue => e
+    rescue Exception => e
       puts e.to_s, e.backtrace.join("\n")
     end
   end
