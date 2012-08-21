@@ -1,8 +1,6 @@
 require "stringex"
 require "pp"
 
-require "models/post/db"
-
 class Post
   include Model
 

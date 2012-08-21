@@ -29,3 +29,7 @@ class CachedDatabase
     end
   end
 end
+
+require "db/admin"
+require "db/categories"
+require "db/posts"

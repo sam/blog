@@ -5,8 +5,8 @@ require "harbor"
 require "json"
 Dir["target/dependency/*.jar"].each { |jar| require jar }
 
-require "lib/model"
-require "lib/cached_database"
+require "models/model"
+require "db/cached_database"
 
 Bundler.require(:default, config.environment.to_sym)
 

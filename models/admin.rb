@@ -1,5 +1,4 @@
 require "bcrypt"
-require "models/admin/db"
 
 class Admin
   include Model

@@ -1,5 +1,3 @@
-require "models/category/db"
-
 class Category
   include Model
   
