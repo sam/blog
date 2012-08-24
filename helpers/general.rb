@@ -1,3 +1,5 @@
+require "RedCloth"
+
 class Blog
   module Helpers
     module General
