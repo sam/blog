@@ -19,9 +19,9 @@ class Blog < Harbor::Application
 
 end
 
-Dir[config.root + 'controllers/*.rb'].each do |controller|
-  require controller
-end
+require "controllers/posts"
+require "controllers/admin"
+require "controllers/admin/posts"
 
 Dir[config.root + 'models/*.rb'].each do |controller|
   require controller
