@@ -1,6 +1,6 @@
 This is my blog.
 
-Run bin/setup to create a login so you can rackup and give it a spin yourself!
+Install Doubleshot (https://github.com/sam/doubleshot), run `git submodule update --init`, `doubleshot build`, and rackup!
 
 TODO:
 

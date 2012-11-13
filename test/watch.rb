@@ -1,8 +1,7 @@
 #!/usr/bin/env jruby
 
-require "java"
 require "rubygems"
-require "bundler/setup" unless Object::const_defined?("Bundler")
+require "doubleshot/setup"
 
 require "singleton"
 
@@ -57,7 +56,7 @@ class Watcher
     end
   end
 
-  def run_single_spec(underscored_name)  
+  def run_single_spec(underscored_name)
     spec = Pathname("test/#{underscored_name}_spec.rb")
 
     if spec.exist?

@@ -1,5 +1,5 @@
 require "rubygems"
-require "bundler/setup" unless Object::const_defined?("Bundler")
+require "doubleshot/setup"
 
 require "ffaker"
 
@@ -16,9 +16,9 @@ require "boot"
 # A hold-over from a copy/paste from another project.
 # Might come in handy here as I flesh out the test suite.
 # class Helper
-# 
+#
 #   @semaphore = Mutex.new
-# 
+#
 #   def self.semaphore
 #     @semaphore
 #   end

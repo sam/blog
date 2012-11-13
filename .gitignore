@@ -6,3 +6,5 @@ tmp
 log
 target
 benchmarks
+.classpath.cache
+.doubleshot_test.pid

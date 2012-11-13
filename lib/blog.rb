@@ -1,10 +1,9 @@
-require "java"
 require "rubygems"
-require "bundler/setup" unless Object::const_defined?("Bundler")
-require "harbor"
-require "json"
-Dir["target/dependency/*.jar"].each { |jar| require jar }
+require "doubleshot/setup"
 
+require "lib/harbor/lib/harbor"
+
+require "json"
 require "models/model"
 require "db/cached_database"
 
