@@ -1,0 +1,38 @@
+# encoding: utf-8
+
+Doubleshot.new do |config|
+
+  config.project = "blog"
+  config.group = "org.sam"
+  config.version = "1.0.0"
+
+  config.gem "rack"
+  config.gem "jruby-rack"
+  config.gem "erubis"
+  config.gem "mime-types"
+  config.gem "tilt"
+  config.gem "sprockets"
+
+  config.gem "couchrest"
+  config.gem "json"
+  config.gem "multi_json", ">= 1.3.7"
+  config.gem "bcrypt-ruby"
+  config.gem "RedCloth"
+  config.gem "chronic"
+  config.gem "stringex"
+  config.gem "ffaker"
+
+  config.jar "org.jruby:jruby-complete:jar:1.7.0.preview2"
+  config.jar "org.infinispan:infinispan-core:jar:5.1.5.FINAL"
+
+  config.gemspec do |spec|
+    spec.summary        = "Blog"
+    spec.description    = <<-DESCRIPTION
+This is my blog.
+DESCRIPTION
+    spec.homepage       = "https://github.com/sam/blog"
+    spec.author         = "Sam Smoot"
+    spec.email          = "ssmoot@gmail.com"
+    spec.license        = "MIT-LICENSE"
+  end
+end
