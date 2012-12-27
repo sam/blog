@@ -12,7 +12,6 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-//    "spray-client" % "spracy-client_0.8.0-RC3" % "0.8.0-RC3",
     "sprouch" % "sprouch_2.10.0-RC3" % "0.5.4"
   )
 
