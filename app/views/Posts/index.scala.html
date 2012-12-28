@@ -1,6 +1,7 @@
 @(posts: Seq[Post], archives: Seq[Post], categories: Seq[String])
 
 @main {
+    <div id="categories">@categories.mkString(", ")</div>
     <div id="posts">
     @for(post <- posts) {
         <h2><a href="@routes.Posts.show(post.slug)" title="Permanent link to: '@post.title'">@post.title</a></h2>

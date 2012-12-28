@@ -6,7 +6,7 @@ import models._
 object Posts extends Controller {
 
   def index = Action {
-    Ok(views.html.Posts.index(Post.recent, Post.archive, Category.titles))
+    Ok(views.html.Posts.index(Post.recent, Post.archive, Category.titles2))
   }
 
   def show(slug: String) = TODO
