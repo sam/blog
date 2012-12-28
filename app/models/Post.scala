@@ -12,6 +12,7 @@ case class Post(
   }
 
 object Post {
+
   def recent = {
     Seq(
       Post(title = "Test", body = "This is just a test.", slug = "test", publishedAt = new Date(), categories = Seq()),

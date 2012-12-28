@@ -12,7 +12,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "sprouch" % "sprouch_2.10.0-RC3" % "0.5.4"
+    "sprouch" %% "sprouch" % "0.5.6"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
