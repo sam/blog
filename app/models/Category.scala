@@ -1,26 +1,24 @@
 package models
 
-import play.api.libs.ws.{Response, WS}
-import play.api.libs.concurrent.Akka
-import akka.util.Timeout
-import concurrent.Await
+import sprouch.{Database, JsonProtocol}
 
 case class Category(title:String)
 
-object Couch {
-  def query[T](url:String, response:Response => T):T = {
-    import play.api.Play.current
-    val akkaSystem = Akka.system
-    import akkaSystem.dispatcher
+object Category extends Model {
 
-    response(Await.result(WS.url(url).get, Timeout(1000).duration))
-  }
-}
+  import JsonProtocol._
 
-object Category {
+//  def query[K,V](view: Database => JsonProtocol.ViewResponse[K,V], process:JsonProtocol.ViewResponse[K,V] => Any) = {
+//    for {
+//      db <- couch.getDb("blog")
+//      result <- view(db)
+//    } yield process(result)
+//  }
+
   def titles = {
-    Couch.query[Seq[String]]("http://127.0.0.1:5984/blog/_design/posts/_view/categories?group=true", {
-      response => (response.json \ "rows" \\ "key").map(_.as[String])
-    })
+    for {
+      db <- couch.getDb("blog")
+      result <- db.queryView[String, Null]("posts", "categories", groupLevel = Some(1))
+    } yield result.rows.map(_.key)
   }
 }
