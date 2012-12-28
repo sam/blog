@@ -11,7 +11,7 @@ object Category {
   def titles2 = {
     implicit val categoryFormat = jsonFormat3(Category)
 
-    for(db <- couch.getDb("items")) yield {
+    for(db <- couch.getDb("blog")) yield {
       db.queryView("_design/posts", "categories") {
         groupLevel = 1
       }
