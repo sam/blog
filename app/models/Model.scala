@@ -1,5 +1,7 @@
 package models
 
+import concurrent.Future
+
 trait Model {
   import play.api.libs.concurrent.Akka
   import sprouch._
@@ -16,4 +18,10 @@ trait Model {
 
   val config = Config(actorSystem, host, port, userPass, https)
   val couch = Couch(config)
+
+  val db = couch.getDb("blog")
+
+  def withDb[T](view:Database => Future[T]) = {
+    db.flatMap(view)
+  }
 }
