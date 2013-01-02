@@ -1,6 +1,7 @@
 package models
 
 import concurrent.Future
+import spray.json.{JsValue, JsonFormat}
 
 trait Model {
   import play.api.libs.concurrent.Akka
@@ -23,5 +24,14 @@ trait Model {
 
   def withDb[T](view:Database => Future[T]) = {
     db.flatMap(view)
+  }
+
+  import sprouch.JsonProtocol._
+  import spray.json._
+
+  implicit object DateFormat extends JsonFormat[java.util.Date] {
+    val format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    override def read(json:JsValue): java.util.Date = format.parse(json.convertTo[String])
+    override def write(date:java.util.Date) = format.format(date).toJson
   }
 }

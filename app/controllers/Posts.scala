@@ -15,19 +15,21 @@ object Posts extends Controller with AkkaExecutionContext {
     Async {
       for {
         titles <- Category.titles
-        recent <- WS.url("http://ssmoot.cloudant.com/blog/_design/posts/_view/all?limit=10&descending=true&include_docs=true").get.map { response =>
-          (response.json \\ "doc").map { json =>
-            Post(
-              title = (json \ "title").as[String],
-              body = (json \ "body").as[String],
-              slug = (json \ "slug").as[String],
-              publishedAt = (json \ "published_at").asOpt[Date]
-            )
-          }
-        }
+//        recent <- WS.url("http://ssmoot.cloudant.com/blog/_design/posts/_view/all?limit=10&descending=true&include_docs=true").get.map { response =>
+//          (response.json \\ "doc").map { json =>
+//            Post(
+//              title = (json \ "title").as[String],
+//              body = (json \ "body").as[String],
+//              slug = (json \ "slug").as[String],
+//              publishedAt = (json \ "published_at").asOpt[Date]
+//            )
+//          }
+//        }
+        recent <- Post.recent
+        archive <- Post.archive
       }
       yield {
-        Ok(views.html.Posts.index(recent, recent, titles))
+        Ok(views.html.Posts.index(recent, archive, titles))
       }
     }
   }

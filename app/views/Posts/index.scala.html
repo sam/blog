@@ -3,8 +3,8 @@
 @main {
     <div id="categories">@categories.mkString(", ")</div>
     <div id="posts">
-    @for(post <- posts) {
-        <h2><a href="@routes.Posts.show(post.slug)" title="Permanent link to: '@post.title'">@post.title</a></h2>
+    @for(post <- posts if(post.slug.isDefined)) {
+        <h2><a href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a></h2>
 
         @if(post.publishedAt != None) {
         <div class="dateline">@post.publishedAt.get.format("yyyy-MM-dd")</div>
@@ -21,9 +21,9 @@
     </div>
 
     <ul id="post_archive">
-        @for(post <- archives) {
+        @for(post <- archives if(post.slug.isDefined)) {
         <li>
-            <a class="nine columns offset-by-four" href="@routes.Posts.show(post.slug)" title="Permanent link to: '@post.title'">@post.title</a>
+            <a class="nine columns offset-by-four" href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a>
             @if(post.publishedAt != None) {
             <span class="three columns">@post.publishedAt.get.format("yyyy-MM-dd")</span>
             }
