@@ -8,7 +8,7 @@ object Posts extends Controller with AkkaExecutionContext {
   import play.api.Play.current
   import akkaSystem.dispatcher
 
-  def index = Cached("posts", 1000) {
+  def index = Cached("posts", 60) {
     Action {
       Async {
         for {
