@@ -22,8 +22,6 @@ object Post extends Model {
   }
 
   def archive(startKey:(Long, String)) = {
-    import spray.json._
-
     withDb(_.queryView[(Long, String), Post]("posts", "archive", flags = Set[ViewQueryFlag](descending), startKey = Some(startKey), skip = Some(1)))
   }
 
