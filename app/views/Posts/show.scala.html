@@ -1,8 +1,8 @@
-@(post: Post, categories: Seq[String])
+@(post: Post)(implicit categories: Seq[String])
 
 @import helpers.Markdown._
 
-@main(categories) {
+@main {
 
     <h1>@post.title</h1>
 

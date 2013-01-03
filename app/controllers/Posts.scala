@@ -9,30 +9,38 @@ object Posts extends Controller with AkkaExecutionContext {
   import akkaSystem.dispatcher
 
   def index = Cached("posts", 60) {
-    Action {
+    ActionWithCategories { implicit categories => request =>
       Async {
         for {
-          categories <- Category.titles
           recent <- Post.recent
-          archive <- Post.archive(recent.last.key)
+          archive <- Post.archive(recent.keys.last)
         }
-        yield Ok(views.html.Posts.index(recent.map(_.value), archive.map(_.value), categories))
+        yield Ok(views.html.Posts.index(recent.docs[Post], archive.values))
       }
     }
   }
 
-  def show(slug: String) = Action {
-    Async {
-      for {
-        post <- Post.getBySlug(slug)
-        categories <- Category.titles
-      } yield post.map { post =>
-        Ok(views.html.Posts.show(post, categories))
-      }.getOrElse(NotFound)
+  def show(slug: String) = Cached("posts." + slug, 60) {
+    ActionWithCategories { implicit categories => request =>
+      Async {
+        for(post <- Post.getBySlug(slug))
+        yield post.map { post =>
+          Ok(views.html.Posts.show(post))
+        }.getOrElse(NotFound)
+      }
     }
   }
 
   def create = TODO
 
   def delete(id: String) = TODO
+
+  private def ActionWithCategories(action:Seq[String] => Request[AnyContent] => Result): Action[AnyContent] = {
+    Action { request =>
+      Async {
+        for(categories <- Category.titles)
+        yield action(categories)(request)
+      }
+    }
+  }
 }

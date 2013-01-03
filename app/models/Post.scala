@@ -18,26 +18,16 @@ object Post extends Model {
   implicit val postFormat = jsonFormat5(Post.apply)
 
   def recent = {
-    withDb(_.queryView[(Long, String), Post]("posts", "all", flags = Set[ViewQueryFlag](descending), limit = Some(10)).map(_.rows))
+    withDb(_.queryView[(Long, String), Null]("posts", "all", flags = Set[ViewQueryFlag](descending, include_docs), limit = Some(10)))
   }
 
   def archive(startKey:(Long, String)) = {
     import spray.json._
 
-    // TODO: This is a Hack to get the project to compile,
-    // but the beahavior is not correct. The JSON Array is
-    // doubly-escaped by Sprouch so the query fails to begin
-    // returning results at the actual startKey.
-    // (It starts at the beginning.)
-    //
-    // When https://github.com/KimStebel/sprouch/issues/8
-    // is resolved, the following val should be removed,
-    // and the ultimate fix applied.
-    val _startKey = startKey.toJson.toString
-    withDb(_.queryView[(Long, String), Post]("posts", "archive", flags = Set[ViewQueryFlag](descending), keyDocIdRange = Some(_startKey, ""), skip = Some(1)).map(_.rows))
+    withDb(_.queryView[(Long, String), Post]("posts", "archive", flags = Set[ViewQueryFlag](descending), startKey = Some(startKey), skip = Some(1)))
   }
 
   def getBySlug(slug:String) = {
-    withDb(_.queryView[String, Post]("posts", "slugs", flags = Set[ViewQueryFlag](include_docs, inclusive_end), key = Some(slug)).map(_.rows.map(_.value).headOption))
+    withDb(_.queryView[String, Null]("posts", "slugs", flags = Set[ViewQueryFlag](include_docs, inclusive_end), key = Some(slug)).map(_.docs[Post].headOption))
   }
 }

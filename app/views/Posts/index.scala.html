@@ -1,8 +1,8 @@
-@(posts: Seq[Post], archives: Seq[Post], categories: Seq[String])
+@(posts: Seq[Post], archives: Seq[Post])(implicit categories: Seq[String])
 
 @import helpers.Markdown._
 
-@main(categories) {
+@main {
     <div id="posts">
     @for(post <- posts if(post.slug.isDefined)) {
         <h2><a href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a></h2>

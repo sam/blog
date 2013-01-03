@@ -12,7 +12,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "sprouch" %% "sprouch" % "0.5.8",
+    "sprouch" %% "sprouch" % "0.5.9",
     "org.pegdown" % "pegdown" % "1.2.0"
   )
 
