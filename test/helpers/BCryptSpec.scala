@@ -12,5 +12,14 @@ class BCryptSpec extends Specification {
     "implicitly convert a String to a Password" in {
       "bob".bcrypt must beAnInstanceOf[Password]
     }
+
+    "return hash when toString is called" in {
+      val bob = "bob".bcrypt
+      bob.toString mustEqual bob.hash
+    }
+
+    "match a Password to a plain text candidate" in {
+      "bob".bcrypt == "bob" mustEqual true
+    }
   }
 }

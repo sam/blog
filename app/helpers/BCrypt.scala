@@ -10,5 +10,7 @@ object BCrypt {
     val hash:String = B.hashpw(plainText, B.gensalt)
 
     def ==(plainTextCandidate:String) = B.checkpw(plainTextCandidate, hash)
+
+    override def toString = hash
   }
 }
