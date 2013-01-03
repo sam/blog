@@ -1,0 +1,26 @@
+@(post: Post)
+
+@import helpers.Markdown._
+
+@main {
+
+    <h1>@post.title</h1>
+
+    @post.publishedAt.map(date => <div class="dateline">@date.format("yyyy-MM-dd")</div>)
+
+    @post.categories.map(<div class="categories">Filed under _.mkString(", ") </div>)
+
+    <div id='tweet'>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-text="@post.title" data-count="horizontal" data-via="srsmoot" onClick="_gaq.push(['_trackEvent', 'Link', 'Click', 'Post Twitter Share']);">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    </div>
+
+    <article>
+        @post.body.map(markdownToHtml(Html.apply))
+
+        <footer>
+            <p id='questions'>
+                Questions and comments <a href="http://twitter.com/srsmoot" onClick="_gaq.push(['_trackEvent', 'Link', 'Click', 'Post Twitter Feedback']);">@@srsmoot</a>
+            </p>
+        </footer>
+    </article>
+}

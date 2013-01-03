@@ -37,4 +37,8 @@ object Post extends Model {
     val _startKey = startKey.toJson.toString
     withDb(_.queryView[(Long, String), Post]("posts", "archive", flags = Set[ViewQueryFlag](descending), keyDocIdRange = Some(_startKey, ""), skip = Some(1)).map(_.rows))
   }
+
+  def getBySlug(slug:String) = {
+    withDb(_.queryView[String, Post]("posts", "slugs", flags = Set[ViewQueryFlag](include_docs, inclusive_end), key = Some(slug)).map(_.rows.map(_.value).headOption))
+  }
 }

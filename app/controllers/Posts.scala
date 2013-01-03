@@ -21,7 +21,14 @@ object Posts extends Controller with AkkaExecutionContext {
     }
   }
 
-  def show(slug: String) = TODO
+  def show(slug: String) = Action {
+    Async {
+      for(post <- Post.getBySlug(slug))
+      yield post.map { post =>
+        Ok(views.html.Posts.show(post))
+      }.getOrElse(NotFound)
+    }
+  }
 
   def create = TODO
 

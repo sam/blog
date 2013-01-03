@@ -17,7 +17,7 @@ trait Model {
   val userPass = Some("" -> "")
   val https = false
 
-  val config = Config(actorSystem) //, host, port, userPass, https)
+  val config = Config(actorSystem, host, port, userPass, https)
   val couch = Couch(config)
 
   val db = couch.getDb("blog")
