@@ -2,14 +2,11 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           controllers.Application.index
-
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Posts
-GET     /posts                  controllers.Posts.index
+GET     /                       controllers.Posts.index
 GET     /posts/:slug            controllers.Posts.show(slug: String)
 POST    /posts                  controllers.Posts.create
 POST    /posts/:id/delete       controllers.Posts.delete(id: String)

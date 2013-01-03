@@ -12,20 +12,22 @@ object Posts extends Controller with AkkaExecutionContext {
     Action {
       Async {
         for {
-          titles <- Category.titles
+          categories <- Category.titles
           recent <- Post.recent
           archive <- Post.archive(recent.last.key)
         }
-        yield Ok(views.html.Posts.index(recent.map(_.value), archive.map(_.value), titles))
+        yield Ok(views.html.Posts.index(recent.map(_.value), archive.map(_.value), categories))
       }
     }
   }
 
   def show(slug: String) = Action {
     Async {
-      for(post <- Post.getBySlug(slug))
-      yield post.map { post =>
-        Ok(views.html.Posts.show(post))
+      for {
+        post <- Post.getBySlug(slug)
+        categories <- Category.titles
+      } yield post.map { post =>
+        Ok(views.html.Posts.show(post, categories))
       }.getOrElse(NotFound)
     }
   }

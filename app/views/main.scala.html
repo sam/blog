@@ -1,4 +1,4 @@
-@(content: Html)
+@(categories: Seq[String])(content: Html)
 
 <!DOCTYPE html>
 
@@ -55,8 +55,8 @@
             line-height: 1.1em;
             }
             h2 { font-size: 2.8em; margin-bottom: 10px; }
-            .categories { margin-bottom: 20px; }
-            li.category { font-size: 14px; margin-left: 4px; }
+            .categories { margin-bottom: 20px; margin-top: 10px; }
+            .categories li { font-size: 14px; margin-left: 4px; }
         </style>
 
         <script src="@routes.Assets.at("javascripts/application.coffee")"></script>
@@ -82,7 +82,16 @@
                 RSS']);" title="Subscribe to get the latest blog posts
                 in to your news reader">RSS</a>
                             </li>
-                            <li><a title="Categories" href="/categories">Categories</a></li>
+                            @if(!categories.isEmpty) {
+                            <li class="categories">
+                                <a title="Categories" href="/categories">Categories</a>
+                                <ul>
+                                @for(category <- categories) {
+                                    <li><a title="@category">@category</a></li>
+                                }
+                                </ul>
+                            </li>
+                            }
                         </ul>
                     </div>
 

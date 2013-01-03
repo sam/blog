@@ -2,17 +2,14 @@
 
 @import helpers.Markdown._
 
-@main {
-    <div id="categories">@categories.mkString(", ")</div>
+@main(categories) {
     <div id="posts">
     @for(post <- posts if(post.slug.isDefined)) {
         <h2><a href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a></h2>
 
-        @post.publishedAt.map(date => <div class="dateline">@date.format("yyyy-MM-dd")</div>)
+        @post.publishedAt.map { date => <div class="dateline">@date.format("yyyy-MM-dd")</div> }
 
-        @if(!post.categories.isEmpty) {
-        <div class="categories">Filed under @post.categories.mkString(", ")</div>
-        }
+        @post.categories.map { categories => <div class="categories">Filed under @categories.mkString(", ") </div> }
 
         <article>@post.body.map(markdownToHtml(Html.apply))</article>
         <hr class="front">
@@ -24,7 +21,7 @@
         @for(post <- archives if(post.slug.isDefined)) {
         <li>
             <a class="nine columns offset-by-four" href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a>
-            @post.publishedAt.map(date => <span class="three columns">@date.format("yyyy-MM-dd")</span>)
+            @post.publishedAt.map { date => <span class="three columns">@date.format("yyyy-MM-dd")</span> }
         </li>
         }
     </ul>

@@ -6,9 +6,8 @@ case class Post(
                  title:Option[String],
                  body: Option[String],
                  slug: Option[String],
-                 publishedAt: Option[Date]) {
-  def categories = Nil
-}
+                 publishedAt: Option[Date],
+                 categories: Option[Seq[String]])
 
 object Post extends Model {
 
@@ -16,7 +15,7 @@ object Post extends Model {
   import sprouch.JsonProtocol._
 
   import ViewQueryFlag._
-  implicit val postFormat = jsonFormat4(Post.apply)
+  implicit val postFormat = jsonFormat5(Post.apply)
 
   def recent = {
     withDb(_.queryView[(Long, String), Post]("posts", "all", flags = Set[ViewQueryFlag](descending), limit = Some(10)).map(_.rows))

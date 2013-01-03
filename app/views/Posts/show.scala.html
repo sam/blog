@@ -1,14 +1,14 @@
-@(post: Post)
+@(post: Post, categories: Seq[String])
 
 @import helpers.Markdown._
 
-@main {
+@main(categories) {
 
     <h1>@post.title</h1>
 
-    @post.publishedAt.map(date => <div class="dateline">@date.format("yyyy-MM-dd")</div>)
+    @post.publishedAt.map { date => <div class="dateline">@date.format("yyyy-MM-dd")</div> }
 
-    @post.categories.map(<div class="categories">Filed under _.mkString(", ") </div>)
+    @post.categories.map { categories => <div class="categories">Filed under @categories.mkString(", ") </div> }
 
     <div id='tweet'>
         <a href="http://twitter.com/share" class="twitter-share-button" data-text="@post.title" data-count="horizontal" data-via="srsmoot" onClick="_gaq.push(['_trackEvent', 'Link', 'Click', 'Post Twitter Share']);">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
