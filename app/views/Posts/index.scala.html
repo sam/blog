@@ -1,5 +1,7 @@
 @(posts: Seq[Post], archives: Seq[Post], categories: Seq[String])
 
+@import helpers.Markdown._
+
 @main {
     <div id="categories">@categories.mkString(", ")</div>
     <div id="posts">
@@ -14,7 +16,7 @@
         <div class="categories">Filed under @post.categories.mkString(", ")</div>
         }
 
-        <article>@post.body</article>
+        <article>@post.body.map(markdownToHtml(Html.apply))</article>
         <hr class="front">
         </br>
     }
