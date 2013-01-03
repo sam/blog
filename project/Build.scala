@@ -13,7 +13,8 @@ object ApplicationBuild extends Build {
     javaJdbc,
     javaEbean,
     "sprouch" %% "sprouch" % "0.5.9",
-    "org.pegdown" % "pegdown" % "1.2.0"
+    "org.pegdown" % "pegdown" % "1.2.0",
+    "org.mindrot" % "jbcrypt" % "0.3m"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

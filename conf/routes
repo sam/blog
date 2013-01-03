@@ -10,3 +10,7 @@ GET     /                       controllers.Posts.index
 GET     /posts/:slug            controllers.Posts.show(slug: String)
 POST    /posts                  controllers.Posts.create
 POST    /posts/:id/delete       controllers.Posts.delete(id: String)
+
+# Admin
+GET     /login                  controllers.Application.login
+POST    /login                  controllers.Application.submit
