@@ -1,22 +1,20 @@
-@(loginForm: play.api.data.Form[(String,String)])
+@(loginForm: play.api.data.Form[(String, String)])
 
 @import helper.twitterBootstrap._
 
 @main {
-    @* if(Error) *@
-    @if(false) {
-    <div class="alert-message error fade in" data-alert="alert">
-        <a class="close" href="#">×</a>
-        <p><strong>Oops!</strong> It looks like you need to <a href="javascript:$('#email').focus()">try again</a>.</p>
-    </div>
-    }
-
     <div class="row" style="margin-top: 40px;">
+        @if(loginForm.hasGlobalErrors) {
+            <div class="span8 alert-message error fade in" data-alert="alert">
+                <a class="close" href="#">×</a>
+                <p>@loginForm.globalError.map(_.message)</p>
+            </div>
+        }
         <div class="span8" style="border: 1px solid #ddd; padding-top: 10px;">
-            @helper.form(action = routes.Application.submit) {
-                @helper.inputText(loginForm("username"))
+            @helper.form(action = routes.Application.submitLogin) {
+                @helper.inputText(loginForm("email"), '_label -> "Email", '_showConstraints -> false, '_showErrors -> true)
 
-                @helper.inputPassword(loginForm("password"))
+                @helper.inputPassword(loginForm("password"), '_label -> "Password")
 
                 <div class="actions" style="margin-bottom: 0px;">
                     <input type="submit" class="btn primary" value="Submit">

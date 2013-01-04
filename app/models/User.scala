@@ -1,10 +1,13 @@
 package models
 
-import sprouch.{ViewQueryFlag, JsonProtocol}
-import concurrent.Await
+import sprouch.{SprouchException, ViewQueryFlag, JsonProtocol}
+import concurrent.{Future, Await}
 import concurrent.duration._
 
-case class User(email:String, password:String)
+import helpers.BCrypt._
+import play.libs.Akka
+
+case class User(email:String, password:Password)
 
 object User extends Model {
 
@@ -13,8 +16,15 @@ object User extends Model {
   implicit val userFormat = jsonFormat2(User.apply)
 
   def authenticate(email:String, password:String) = {
-    val user = for(user <- withDb(_.getDoc[User](email)))
-    yield if(user.data.password == password) Some(user.data) else None
-    Await.result(user, 10 seconds).asInstanceOf[Option[User]]
+
+    val future = db.flatMap { db =>
+      db.getDoc[User](email).map { doc =>
+        Some(doc.data).filter(_.password == password)
+      }.recover {
+        case e:SprouchException if e.error.status == 404 => None
+      }
+    }
+    Await.result(future, 10 seconds)
+
   }
 }

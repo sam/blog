@@ -11,6 +11,9 @@ GET     /posts/:slug            controllers.Posts.show(slug: String)
 POST    /posts                  controllers.Posts.create
 POST    /posts/:id/delete       controllers.Posts.delete(id: String)
 
-# Admin
+# Authentication
 GET     /login                  controllers.Application.login
-POST    /login                  controllers.Application.submit
+POST    /login                  controllers.Application.submitLogin
+
+# Admin
+GET     /admin                  controllers.Admin.index
