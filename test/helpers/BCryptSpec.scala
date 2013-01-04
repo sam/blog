@@ -21,5 +21,14 @@ class BCryptSpec extends Specification {
     "match a Password to a plain text candidate" in {
       "bob".bcrypt == "bob" mustEqual true
     }
+
+    "be able to create a Password from a hash" in {
+      val hash = "bob".bcrypt.hash
+      val password = hash.toPassword
+
+      hash must beAnInstanceOf[String]
+      password must beAnInstanceOf[Password]
+      password == "bob" mustEqual true
+    }
   }
 }
