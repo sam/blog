@@ -19,7 +19,7 @@ class BCryptSpec extends Specification {
     }
 
     "match a Password to a plain text candidate" in {
-      "bob".bcrypt == "bob" mustEqual true
+      "bob".bcrypt === "bob"
     }
 
     "be able to create a Password from a hash" in {
@@ -28,7 +28,7 @@ class BCryptSpec extends Specification {
 
       hash must beAnInstanceOf[String]
       password must beAnInstanceOf[Password]
-      password == "bob" mustEqual true
+      password === "bob"
     }
   }
 }
