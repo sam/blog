@@ -1,12 +1,13 @@
 @(post: Post)(implicit categories: Seq[String])
 
 @import helpers.Markdown._
+@import helpers.Html._
 
 @main {
 
     <h1>@post.title</h1>
 
-    @post.publishedAt.map { date => <div class="dateline">@date.format("yyyy-MM-dd")</div> }
+    @post.publishedAt.map { date => <div class="dateline">@formatDate(date)</div> }
 
     @post.categories.map { categories => <div class="categories">Filed under @categories.mkString(", ") </div> }
 

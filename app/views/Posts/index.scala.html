@@ -1,13 +1,14 @@
 @(posts: Seq[Post], archives: Seq[Post])(implicit categories: Seq[String])
 
 @import helpers.Markdown._
+@import helpers.Html._
 
 @main {
     <div id="posts">
     @for(post <- posts if(post.slug.isDefined)) {
         <h2><a href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a></h2>
 
-        @post.publishedAt.map { date => <div class="dateline">@date.format("yyyy-MM-dd")</div> }
+        @post.publishedAt.map { date => <div class="dateline">@formatDate(date)</div> }
 
         @post.categories.map { categories => <div class="categories">Filed under @categories.mkString(", ") </div> }
 
@@ -21,7 +22,7 @@
         @for(post <- archives if(post.slug.isDefined)) {
         <li>
             <a class="nine columns offset-by-four" href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a>
-            @post.publishedAt.map { date => <span class="three columns">@date.format("yyyy-MM-dd")</span> }
+            @post.publishedAt.map { date => <span class="three columns">@formatDate(date)</span> }
         </li>
         }
     </ul>

@@ -9,7 +9,9 @@ object BCrypt {
 
     def bcrypt = new Password(B.hashpw(hash, B.gensalt))
 
-    def ==(plainTextCandidate:String) = B.checkpw(plainTextCandidate, hash)
+    def equal(plainTextCandidate:String) = B.checkpw(plainTextCandidate, hash)
+
+    def == = equal _
 
     override def toString = hash
   }
