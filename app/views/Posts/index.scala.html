@@ -5,8 +5,8 @@
 
 @main {
     <div id="posts">
-    @for(post <- posts if(post.slug.isDefined)) {
-        <h2><a href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a></h2>
+    @for(post <- posts) {
+        <h2><a href="@routes.Posts.show(post.slug)" title="Permanent link to: '@post.title'">@post.title</a></h2>
 
         @post.publishedAt.map { date => <div class="dateline">@formatDate(date)</div> }
 
@@ -19,9 +19,9 @@
     </div>
 
     <ul id="post_archive">
-        @for(post <- archives if(post.slug.isDefined)) {
+        @for(post <- archives) {
         <li>
-            <a class="nine columns offset-by-four" href="@routes.Posts.show(post.slug.get)" title="Permanent link to: '@post.title'">@post.title</a>
+            <a class="nine columns offset-by-four" href="@routes.Posts.show(post.slug)" title="Permanent link to: '@post.title'">@post.title</a>
             @post.publishedAt.map { date => <span class="three columns">@formatDate(date)</span> }
         </li>
         }

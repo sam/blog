@@ -3,10 +3,11 @@ package models
 import java.util.Date
 
 case class Post(
-                 title:Option[String],
-                 body: Option[String],
-                 slug: Option[String],
+                 _id:Option[String],
+                 title:String,
+                 slug: String,
                  publishedAt: Option[Date],
+                 body: Option[String],
                  categories: Option[Seq[String]])
 
 object Post extends Model {
@@ -15,7 +16,11 @@ object Post extends Model {
   import sprouch.JsonProtocol._
 
   import ViewQueryFlag._
-  implicit val postFormat = jsonFormat5(Post.apply)
+  implicit val postFormat = jsonFormat6(Post.apply)
+
+  def all = {
+    withDb(_.queryView[(Long, String), Null]("posts", "all", flags = Set[ViewQueryFlag](descending, include_docs)))
+  }
 
   def recent = {
     withDb(_.queryView[(Long, String), Null]("posts", "all", flags = Set[ViewQueryFlag](descending, include_docs), limit = Some(10)))
@@ -27,5 +32,9 @@ object Post extends Model {
 
   def getBySlug(slug:String) = {
     withDb(_.queryView[String, Null]("posts", "slugs", flags = Set[ViewQueryFlag](include_docs, inclusive_end), key = Some(slug)).map(_.docs[Post].headOption))
+  }
+
+  def getById(id:String) = {
+    withDb(_.queryView[String, Null]("posts", "by_id", flags = Set[ViewQueryFlag](include_docs, inclusive_end), key = Some(id)).map(_.docs[Post].headOption))
   }
 }

@@ -17,3 +17,6 @@ POST    /login                  controllers.Application.submitLogin
 
 # Admin
 GET     /admin                  controllers.Admin.index
+GET     /posts/:id/edit         controllers.Posts.edit(id: String)
+POST    /posts                  controllers.Posts.create
+POST    /posts/:id              controllers.Posts.update(id:String)
