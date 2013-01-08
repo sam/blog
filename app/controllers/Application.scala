@@ -2,7 +2,7 @@ package controllers
 
 import play.api.mvc._
 import models._
-import play.api.cache.Cached
+import concurrent.{Future, Await}
 
 object Application extends Controller with AkkaExecutionContext {
   import play.api.Play.current
@@ -13,23 +13,26 @@ object Application extends Controller with AkkaExecutionContext {
   }
 
   def submitLogin = Action { implicit request =>
-    loginForm.bindFromRequest.fold(
-      errors => BadRequest(views.html.Application.login(errors)),
-      value => Redirect(routes.Admin.index).withSession("email" -> value._1)
-    )
+    Async {
+      Future(
+        loginForm.bindFromRequest.fold(
+          errors => BadRequest(views.html.Application.login(errors)),
+          value => Redirect(routes.Admin.index).withSession("email" -> value._1)
+        )
+      )
+    }
   }
 
   import play.api.data.Form
   import play.api.data.Forms._
-
-//  import play.api.data.validation.Constraints._
+  import concurrent.duration._
 
   val loginForm = Form(
     tuple(
       "email" -> nonEmptyText,
       "password" -> text
     ) verifying("Invalid email or password.", fields => fields match {
-      case (e, p) => User.authenticate(e,p).isDefined
+      case (e, p) => Await.result(User.authenticate(e,p).map(_.isDefined), 5 seconds)
     })
   )
 }

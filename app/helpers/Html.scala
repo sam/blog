@@ -1,11 +1,11 @@
 package helpers
 
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
+import java.util.Date
+import java.text.SimpleDateFormat
 
 object Html {
 
-  val dateFormat = DateTimeFormat.forPattern("yyyy-MM-dd")
+  val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
-  def formatDate(date:DateTime) = dateFormat.print(date)
+  def formatDate(date:Date) = dateFormat.format(date)
 }

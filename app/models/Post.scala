@@ -1,12 +1,12 @@
 package models
 
-import org.joda.time.DateTime
+import java.util.Date
 
 case class Post(
                  title:Option[String],
                  body: Option[String],
                  slug: Option[String],
-                 publishedAt: Option[DateTime],
+                 publishedAt: Option[Date],
                  categories: Option[Seq[String]])
 
 object Post extends Model {

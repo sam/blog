@@ -1,9 +1,8 @@
 package models
 
 import concurrent.Future
-import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat
-import com.ning.http.util.DateUtil
+import java.util.Date
+import org.apache.http.impl.cookie.DateUtils
 
 trait Model {
   import play.api.libs.concurrent.Akka
@@ -33,13 +32,10 @@ trait Model {
   import sprouch.JsonProtocol._
   import spray.json._
 
-  implicit object DateFormat extends JsonFormat[DateTime] {
-    val format = ISODateTimeFormat.dateTime
-    override def read(json:JsValue):DateTime = try {
-      DateTime.parse(json.convertTo[String], format)
-    } catch {
-      new DateTime(DateUtil.parseDate(json.convertTo[String]))
-    }
-    override def write(date:DateTime) = format.print(date).toJson
+  implicit object DateFormat extends JsonFormat[Date] {
+    val jsDateFormat = "EEE MMM dd HH:mm:ss zzz yyyy"
+
+    override def read(json:JsValue):Date = DateUtils.parseDate(json.convertTo[String], Array[String](jsDateFormat, DateUtils.PATTERN_RFC1123))
+    override def write(date:Date) = date.toString.toJson
   }
 }
