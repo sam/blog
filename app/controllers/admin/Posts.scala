@@ -2,11 +2,15 @@ package controllers.admin
 
 import play.api.mvc._
 import models._
-import controllers.Secured
+import controllers.{admin, Secured}
+import concurrent.Await
+import play.api.cache.Cache
+import java.util.Date
 
 object Posts extends Secured {
   import play.api.Play.current
   import akkaSystem.dispatcher
+  import concurrent.duration._
 
   def index = withAuth { username => implicit request =>
     Async {
@@ -18,7 +22,19 @@ object Posts extends Secured {
     }
   }
 
-  def create = TODO
+  def create = withAuth { username => implicit request =>
+    Async {
+      for(categories <- Category.titles)
+      yield postForm.bindFromRequest.fold(
+        errors => BadRequest(views.html.admin.Posts.edit(errors)(categories)),
+        post => {
+          Await.result(Post.create(post), 5 seconds)
+          Cache.set("modifiedAt", new Date().getTime)
+          Redirect(admin.routes.Posts.index).flashing("success" -> s"""Post "${post.title}" successfully CREATED.""")
+        }
+      )
+    }
+  }
 
   def newPost = withAuth { username => implicit request =>
     Async {
@@ -39,17 +55,26 @@ object Posts extends Secured {
     }
   }
 
-  def update(id:String) = TODO
+  def update(id:String) = withAuth { username => implicit request =>
+    Async {
+      for(categories <- Category.titles)
+      yield postForm.bindFromRequest.fold(
+        errors => BadRequest(views.html.admin.Posts.edit(errors)(categories)),
+        post => {
+          Await.result(Post.update(id, post), 5 seconds)
+          Cache.set("modifiedAt", new Date().getTime)
+          Redirect(admin.routes.Posts.index).flashing("success" -> s"""Post "${post.title}" successfully UPDATED.""")
+        }
+      )
+    }
+  }
 
   def delete(id: String) = withAuth { username => implicit request =>
     Async {
-      for {
-        categories <- Category.titles
-        posts <- Post.all
-        (_, post) <- Post.delete(id)
-      }
+      for((_, post) <- Post.delete(id))
       yield {
-        Redirect(routes.Posts.index).flashing("success" -> s"""Post "${post.data.title}" successfully deleted.""")
+        Cache.set("modifiedAt", new Date().getTime)
+        Redirect(routes.Posts.index).flashing("success" -> s"""Post "${post.data.title}" successfully DELETED.""")
       }
     }
   }

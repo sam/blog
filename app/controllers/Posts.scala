@@ -3,14 +3,14 @@ package controllers
 import play.api.mvc._
 import play.api.mvc.Security._
 import models._
-import play.api.cache.Cached
+import play.api.cache.{Cache, Cached}
 import concurrent.Await
 
 object Posts extends Controller with AkkaExecutionContext {
   import play.api.Play.current
   import akkaSystem.dispatcher
 
-  def index = Cached("posts", 60) {
+  def index = Cached(s"${Cache.get("modifiedAt")}-posts", 60) {
     Action {
       Async {
         for {
@@ -23,7 +23,7 @@ object Posts extends Controller with AkkaExecutionContext {
     }
   }
 
-  def show(slug: String) = Cached("posts." + slug, 60) {
+  def show(slug: String) = Cached(s"${Cache.get("modifiedAt")}-posts-$slug", 60) {
     Action {
       Async {
         for {

@@ -23,7 +23,7 @@ trait Model {
 
   val couch = Couch(config)
 
-  val db = couch.getDb(configuration.getString("couchdb.database").getOrElse("blog"))
+  implicit val db = couch.getDb(configuration.getString("couchdb.database").getOrElse("blog"))
 
   def withDb[T](view:Database => Future[T]) = {
     db.flatMap(view)
