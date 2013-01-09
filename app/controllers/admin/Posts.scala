@@ -55,6 +55,13 @@ object Posts extends Secured {
     }
   }
 
+  def preview = Action { implicit request =>
+    import helpers.Markdown._
+    request.body.asFormUrlEncoded.map { data =>
+      Ok(markdownToHtml(data("body").head))
+    }.getOrElse(BadRequest("Preview requires an encoded Form"))
+  }
+
   def update(id:String) = withAuth { username => implicit request =>
     Async {
       for(categories <- Category.titles)

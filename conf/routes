@@ -17,6 +17,7 @@ POST    /login                        controllers.Application.submitLogin
 
 # Admin.Posts
 GET     /admin/posts                  controllers.admin.Posts.index
+POST    /admin/posts/preview          controllers.admin.Posts.preview
 GET     /admin/posts/new              controllers.admin.Posts.newPost
 GET     /admin/posts/:id/edit         controllers.admin.Posts.edit(id: String)
 POST    /admin/posts                  controllers.admin.Posts.create
