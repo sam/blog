@@ -19,6 +19,11 @@ class BCryptSpec extends Specification {
     }
 
     "match a Password to a plain text candidate" in {
+      // Here we're calling Password#==(String),
+      // so simply saying:
+      //   "bob".bcrypt === "bob"
+      // Wouldn't work since that doesn't call
+      // ==() or equal() on the LHS.
       "bob".bcrypt == "bob" mustEqual true
     }
 
