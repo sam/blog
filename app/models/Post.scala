@@ -1,6 +1,7 @@
 package models
 
 import java.util.Date
+import concurrent.Await
 
 case class Post(
                  _id:Option[String],
@@ -16,6 +17,8 @@ object Post extends Model {
   import sprouch.JsonProtocol._
 
   import ViewQueryFlag._
+  import concurrent.duration._
+
   implicit val postFormat = jsonFormat6(Post.apply)
 
   def all = {
@@ -36,5 +39,12 @@ object Post extends Model {
 
   def getById(id:String) = {
     withDb(_.queryView[String, Null]("posts", "by_id", flags = Set[ViewQueryFlag](include_docs, inclusive_end), key = Some(id)).map(_.docs[Post].headOption))
+  }
+
+  def delete(id:String) = {
+    for {
+      post <- withDb(_.getDoc[Post](id))
+      result <- withDb(_.deleteDoc(post))
+    } yield (result, post)
   }
 }

@@ -6,7 +6,7 @@ import models._
 import play.api.cache.Cached
 import concurrent.Await
 
-object Posts extends Secured {
+object Posts extends Controller with AkkaExecutionContext {
   import play.api.Play.current
   import akkaSystem.dispatcher
 
@@ -36,37 +36,4 @@ object Posts extends Secured {
       }
     }
   }
-
-  def create = TODO
-
-  def edit(id:String) = withAuth { username => implicit request =>
-    Async {
-      for {
-        post <- Post.getById(id)
-        categories <- Category.titles
-      }
-      yield post.map { post =>
-        Ok(views.html.Posts.edit(postForm.fill(post))(categories))
-      }.getOrElse(NotFound)
-    }
-  }
-
-  def update(id:String) = TODO
-
-  def delete(id: String) = TODO
-
-  import play.api.data.Form
-  import play.api.data.Forms._
-
-  val postForm = Form[Post](
-    mapping(
-      "title" -> nonEmptyText,
-      "slug" -> nonEmptyText,
-      "publishedAt" -> optional(date("yyyy-MM-dd")),
-      "body" -> optional(text),
-      "categories" -> list(text)
-    )
-    ((title, slug, publishedAt, body, categories) => Post(None, title, slug, publishedAt, body, Some(categories)))
-    ((post: Post) => Some((post.title, post.slug, post.publishedAt, post.body, post.categories.getOrElse(Nil).toList)))
-  )
 }

@@ -17,7 +17,7 @@ object Application extends Controller with AkkaExecutionContext {
       Future(
         loginForm.bindFromRequest.fold(
           errors => BadRequest(views.html.Application.login(errors)),
-          value => Redirect(routes.Admin.index).withSession(Security.username -> value._1)
+          value => Redirect(admin.routes.Posts.index).withSession(Security.username -> value._1)
         )
       )
     }

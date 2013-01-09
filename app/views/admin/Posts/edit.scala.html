@@ -1,0 +1,47 @@
+@(postForm: play.api.data.Form[Post])(implicit categories: Seq[String])
+
+@import helper.twitterBootstrap._
+@import helpers.Markdown._
+@import helpers.Html._
+@import sprouch.JsonProtocol._
+@import spray.json._
+
+@main {
+
+    <div class="row" style="margin-top: 40px;">
+        <div class="span12" style="border: 1px solid #ddd; padding-top: 10px;">
+            <fieldset id="post" style="margin-bottom: 0px;">
+            <legend>Post</legend>
+            @helper.form(action = postForm.value.map { post => controllers.admin.routes.Posts.update(post._id.get) }.getOrElse(controllers.admin.routes.Posts.create)) {
+
+                @helper.inputText(postForm("title"), '_label -> "Title")
+
+                @helper.inputText(postForm("slug"), '_label -> "Slug")
+
+                @helper.inputText(postForm("publishedAt"), '_label -> "Publish On")
+
+                @helper.textarea(postForm("body"), '_label -> "Body", 'cols -> 80, 'rows -> 20, 'class -> "input-xxlarge")
+
+                @helper.input(postForm("categories"), '_label -> "Categories") { (id, name, value, args) =>
+                    <input class="large typeahead" type="text" name="@name" id="@id" @toHtmlArgs(args)>
+                }
+
+                <div class="actions" style="margin-bottom: 0px;">
+                    <input type="submit" class="btn primary" value="Save">
+                    <a href="@controllers.admin.routes.Posts.index" title="Return to Admin" class="btn">Cancel</a>
+                    @postForm.value.map { post =>
+                    <a href="@controllers.admin.routes.Posts.delete(post._id.get)" title="Delete &quot;@post.title&quot;" class="btn danger">Delete</a>
+                    }
+                </div>
+            }
+            </fieldset>
+        </div>
+    </div>
+
+    <script type="text/javascript" charset="utf-8">
+        $('.typeahead').typeahead({
+            "source": @Html(categories.toJson.toString)
+        });
+    </script>
+
+}

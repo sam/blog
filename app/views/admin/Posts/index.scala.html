@@ -1,0 +1,33 @@
+@(posts: Seq[Post])(implicit categories:Seq[String], flash: play.api.mvc.Flash)
+
+@import helper.twitterBootstrap._
+@import helpers.Html._
+
+@main {
+
+    @flash.get("success").map { message =>
+    <div class="alert-message success fade in" data-alert="alert">
+        <a class="close" href="#">×</a>
+        <p>@message</p>
+    </div>
+    }
+
+    <a class="btn primary" title="New Post" href="@controllers.admin.routes.Posts.create">New Post</a>
+
+    <table class="zebra-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Published</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(post <- posts) {
+            <tr>
+                <td><a href="@post._id.map(controllers.admin.routes.Posts.edit _)" title="Edit @post.title">@post.title</a></td>
+                @post.publishedAt.map { date => <td>@formatDate(date)</td> }.getOrElse { <td><span class="label">DRAFT</span></td> }
+            </tr>
+            }
+        </tbody>
+    </table>
+}

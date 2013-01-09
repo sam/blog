@@ -3,20 +3,22 @@
 # ~~~~
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file                 controllers.Assets.at(path="/public", file)
 
 # Posts
-GET     /                       controllers.Posts.index
-GET     /posts/:slug            controllers.Posts.show(slug: String)
-POST    /posts                  controllers.Posts.create
-POST    /posts/:id/delete       controllers.Posts.delete(id: String)
+GET     /                             controllers.Posts.index
+GET     /posts/:slug                  controllers.Posts.show(slug: String)
 
 # Authentication
-GET     /login                  controllers.Application.login
-POST    /login                  controllers.Application.submitLogin
+GET     /login                        controllers.Application.login
+POST    /login                        controllers.Application.submitLogin
 
 # Admin
-GET     /admin                  controllers.Admin.index
-GET     /posts/:id/edit         controllers.Posts.edit(id: String)
-POST    /posts                  controllers.Posts.create
-POST    /posts/:id              controllers.Posts.update(id:String)
+
+# Admin.Posts
+GET     /admin/posts                  controllers.admin.Posts.index
+GET     /admin/posts/new              controllers.admin.Posts.newPost
+GET     /admin/posts/:id/edit         controllers.admin.Posts.edit(id: String)
+POST    /admin/posts                  controllers.admin.Posts.create
+POST    /admin/posts/:id              controllers.admin.Posts.update(id:String)
+GET     /admin/posts/:id/delete       controllers.admin.Posts.delete(id: String)
