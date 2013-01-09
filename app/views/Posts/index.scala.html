@@ -10,7 +10,11 @@
 
         @post.publishedAt.map { date => <div class="dateline">@formatDate(date)</div> }
 
-        @post.categories.map { categories => <div class="categories">Filed under @categories.mkString(", ") </div> }
+        @post.categories.map { categories =>
+            @if(!categories.isEmpty) {
+                <div class="categories">Filed under @categories.mkString(", ") </div>
+            }
+        }
 
         <article>@post.body.map(markdownToHtml(Html.apply))</article>
         <hr class="front">
