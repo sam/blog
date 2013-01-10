@@ -19,7 +19,8 @@ object ApplicationBuild extends Build {
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     resolvers += "Sprouch Repository" at "http://kimstebel.github.com/sprouch/repository",
-    resolvers += "Spray Repository" at "http://repo.spray.io"
+    resolvers += "Spray Repository" at "http://repo.spray.io",
+    resolvers += "Maven Central" at "http://repo1.maven.org/maven2/"
   )
 
 }
