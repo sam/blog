@@ -4,6 +4,7 @@ import org.specs2.mutable._
 
 import play.api.test._
 import play.api.test.Helpers._
+import concurrent.ExecutionContext
 
 /**
  * add your integration spec here.
@@ -20,6 +21,21 @@ class IntegrationSpec extends Specification {
 
         browser.pageSource must contain("Sam Smoot")
        
+      }
+    }
+
+    "render all posts on the index page" in {
+
+      import models._
+
+      running(TestServer(3333), HTMLUNIT) { browser =>
+
+        browser.goTo("http://localhost:3333/")
+
+        for {
+          results <- Post.all
+          post <- results.docs[Post] if(post.isPublished)
+        } browser.pageSource must contain(post.title)
       }
     }
     

@@ -9,7 +9,10 @@ case class Post(
                  slug: String,
                  publishedAt: Option[Date],
                  body: Option[String],
-                 categories: Option[Seq[String]])
+                 categories: Option[Seq[String]]) {
+
+  def isPublished = publishedAt.map(_.before(new Date())).getOrElse(false)
+}
 
 object Post extends Model {
 

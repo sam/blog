@@ -4,6 +4,7 @@ import org.specs2.mutable._
 
 import play.api.test._
 import play.api.test.Helpers._
+import play.api.libs.concurrent.Akka
 
 /**
  * Add your spec here.
@@ -11,7 +12,7 @@ import play.api.test.Helpers._
  * For more information, consult the wiki.
  */
 class ApplicationSpec extends Specification {
-  
+
   "Application" should {
 
     "render the index page" in {
@@ -19,8 +20,8 @@ class ApplicationSpec extends Specification {
         val home = route(FakeRequest(GET, "/")).get
 
         status(home) must equalTo(OK)
-        //        contentType(home) must beSome.which(_ == "text/html")
-        //        contentAsString(home) must contain ("Sam Smoot")
+        contentType(home) must beSome.which(_ == "text/html")
+        contentAsString(home) must contain ("Sam Smoot")
       }
     }
 

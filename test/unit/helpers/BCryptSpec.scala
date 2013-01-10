@@ -1,4 +1,4 @@
-package test.helpers
+package test.unit.helpers
 
 import org.specs2.mutable._
 
