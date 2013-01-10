@@ -1,6 +1,6 @@
-= Blog
+# Blog
 
-== Setup
+## Setup
 
 My database has readonly access available, so to quickly bootstrap your own blog you can download CouchDB, start the
 server, open up Futon, click on Replication, set the source to `http://ssmoot.cloudant.com/blog`, and the target to
