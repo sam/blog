@@ -10,20 +10,19 @@ trait Model {
 
   import play.api.Play._
 
-  val actorSystem = Akka.system
-  implicit val dispatcher = (actorSystem.dispatcher)
+  implicit def dispatcher = Akka.system.dispatcher
 
-  val config = configuration.getConfig("couchdb").map { couchdb =>
-    Config(actorSystem,
+  def config = configuration.getConfig("couchdb").map { couchdb =>
+    Config(Akka.system,
       couchdb.getString("host").getOrElse("localhost"),
       couchdb.getInt("port").getOrElse(5984),
       couchdb.getString("username").map(username => Some(username -> couchdb.getString("password").getOrElse(""))).getOrElse(None),
       couchdb.getBoolean("https").getOrElse(false))
-  }.getOrElse(Config(actorSystem))
+  }.getOrElse(Config(Akka.system))
 
-  val couch = Couch(config)
+  def couch = Couch(config)
 
-  implicit val db = couch.getDb(configuration.getString("couchdb.database").getOrElse("blog"))
+  implicit def db = couch.getDb(configuration.getString("couchdb.database").getOrElse("blog"))
 
   def withDb[T](view:Database => Future[T]) = {
     db.flatMap(view)
