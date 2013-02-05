@@ -3,7 +3,7 @@ package controllers.admin
 import play.api.mvc._
 import models._
 import controllers.{admin, Secured}
-import concurrent.Await
+import concurrent.Future
 import play.api.cache.Cache
 import java.util.Date
 
@@ -24,13 +24,12 @@ object Posts extends Secured {
 
   def create = withAuth { username => implicit request =>
     Async {
-      for(categories <- Category.titles)
-      yield postForm.bindFromRequest.fold(
-        errors => BadRequest(views.html.admin.Posts.edit(errors)(categories)),
+       postForm.bindFromRequest.fold(
+        errors =>  Category.titles map( categories => BadRequest(views.html.admin.Posts.edit(errors)(categories))),
         post => {
-          Await.result(Post.create(post), 5 seconds)
+          Post.create(post) map { _ =>
           Cache.set("modifiedAt", new Date().getTime)
-          Redirect(admin.routes.Posts.index).flashing("success" -> s"""Post "${post.title}" successfully CREATED.""")
+          Redirect(admin.routes.Posts.index).flashing("success" -> s"""Post "${post.title}" successfully CREATED.""")}
         }
       )
     }
@@ -64,13 +63,13 @@ object Posts extends Secured {
 
   def update(id:String) = withAuth { username => implicit request =>
     Async {
-      for(categories <- Category.titles)
-      yield postForm.bindFromRequest.fold(
-        errors => BadRequest(views.html.admin.Posts.edit(errors)(categories)),
+       postForm.bindFromRequest.fold(
+        errors =>  Category.titles map( categories => BadRequest(views.html.admin.Posts.edit(errors)(categories))),
         post => {
-          Await.result(Post.update(id, post), 5 seconds)
-          Cache.set("modifiedAt", new Date().getTime)
-          Redirect(admin.routes.Posts.index).flashing("success" -> s"""Post "${post.title}" successfully UPDATED.""")
+          Post.update(id, post).map{ _ =>
+             Cache.set("modifiedAt", new Date().getTime)
+             Redirect(admin.routes.Posts.index).flashing("success" -> s"""Post "${post.title}" successfully UPDATED.""")
+          }
         }
       )
     }
