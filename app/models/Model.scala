@@ -10,8 +10,6 @@ trait Model {
 
   import play.api.Play._
 
-  implicit def dispatcher = Akka.system.dispatcher
-
   def config = configuration.getConfig("couchdb").map { couchdb =>
     Config(Akka.system,
       couchdb.getString("host").getOrElse("localhost"),
@@ -22,7 +20,7 @@ trait Model {
 
   def couch = Couch(config)
 
-  implicit def db = couch.getDb(configuration.getString("couchdb.database").getOrElse("blog"))
+  def db = couch.getDb(configuration.getString("couchdb.database").getOrElse("blog"))
 
   def withDb[T](view:Database => Future[T]) = {
     db.flatMap(view)
